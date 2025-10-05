@@ -1,0 +1,100 @@
+.root {
+  font-family: var(--font-family-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: var(--font-weight-bold); // Default weight
+}
+
+/* Size */
+.size_1 {
+  font-size: var(--font-size-h1);
+} // 18px
+.size_2 {
+  font-size: var(--font-size-h2);
+} // 20px
+.size_3 {
+  font-size: var(--font-size-h3);
+} // 24px
+.size_4 {
+  font-size: var(--font-size-h4);
+} // 30px
+.size_5 {
+  font-size: var(--font-size-h5);
+} // 36px
+.size_6 {
+  font-size: var(--font-size-h6);
+} // 48px
+
+/* Weight */
+.weight_light {
+  font-weight: 300;
+} // No variable for this weight
+.weight_regular {
+  font-weight: var(--font-weight-normal);
+}
+.weight_medium {
+  font-weight: var(--font-weight-medium);
+}
+.weight_semibold {
+  font-weight: var(--font-weight-semibold);
+}
+.weight_bold {
+  font-weight: var(--font-weight-bold);
+}
+
+/* Align */
+.align_left {
+  text-align: left;
+}
+.align_center {
+  text-align: center;
+}
+.align_right {
+  text-align: right;
+}
+
+/* Truncate */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Wrap */
+.wrap_wrap {
+  text-wrap: wrap;
+}
+.wrap_nowrap {
+  text-wrap: nowrap;
+}
+.wrap_pretty {
+  text-wrap: pretty;
+}
+.wrap_balance {
+  text-wrap: balance;
+}
+
+/* Trim - JS implementation is usually needed for this, but we can try with CSS */
+/* Note: `text-box-trim` is not standard yet. This is for demonstration. */
+.trim_start {
+  /* text-box-trim: start; */
+}
+.trim_end {
+  /* text-box-trim: end; */
+}
+.trim_both {
+  /* text-box-trim: both; */
+}
+
+/* Color */
+.color_gray {
+  color: #6c757d;
+}
+.color_blue {
+  color: #007bff;
+}
+.color_green {
+  color: #28a745;
+}
+.color_red {
+  color: #dc3545;
+}

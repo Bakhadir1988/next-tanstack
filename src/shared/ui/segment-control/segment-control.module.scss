@@ -1,0 +1,47 @@
+@use '@/shared/styles/utils/functions' as *;
+
+.root {
+  display: inline-flex;
+  background-color: var(--color-background-secondary);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  border: 1px solid var(--color-border);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  /* transition: var(--transition-fast); */
+  position: relative; // Нужно для позиционирования ползунка
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &[aria-checked='true'] {
+    color: var(--color-text-white);
+  }
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  z-index: 0;
+}
+
+.icon_wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1; // Иконка находится на слое выше
+  will-change: transform; // Подсказка браузеру для оптимизации анимации
+}

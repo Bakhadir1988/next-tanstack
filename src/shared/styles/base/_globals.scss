@@ -1,0 +1,26 @@
+* {
+  font-family: inherit;
+  box-sizing: border-box;
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-primary);
+  color: var(--color-text);
+  font-size: var(--font-size-p);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}

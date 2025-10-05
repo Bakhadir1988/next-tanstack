@@ -1,0 +1,30 @@
+.root {
+  container-type: inline-size;
+  container-name: grid;
+  margin-bottom: var(--spacing-lg);
+}
+
+.list {
+  /* По умолчанию (для контейнеров < 1980px) будет 2 колонки */
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.list_view_list {
+  grid-template-columns: 1fr;
+}
+
+.list_view_table {
+  position: relative;
+}
+
+@container grid (min-width: 767px) {
+  .list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@container grid (min-width: 991px) {
+  .list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

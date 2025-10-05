@@ -1,0 +1,78 @@
+@use '@/shared/styles/utils/functions' as *;
+
+.root {
+  display: flex;
+}
+
+// Direction
+.direction_row {
+  flex-direction: row;
+}
+.direction_column {
+  flex-direction: column;
+}
+.direction_row_reverse {
+  flex-direction: row-reverse;
+}
+.direction_column_reverse {
+  flex-direction: column-reverse;
+}
+
+// Align
+.align_start {
+  align-items: flex-start;
+}
+.align_center {
+  align-items: center;
+}
+.align_end {
+  align-items: flex-end;
+}
+.align_stretch {
+  align-items: stretch;
+}
+.align_baseline {
+  align-items: baseline;
+}
+
+// Justify
+.justify_start {
+  justify-content: flex-start;
+}
+.justify_center {
+  justify-content: center;
+}
+.justify_end {
+  justify-content: flex-end;
+}
+.justify_between {
+  justify-content: space-between;
+}
+.justify_around {
+  justify-content: space-around;
+}
+
+// Wrap
+.wrap_nowrap {
+  flex-wrap: nowrap;
+}
+.wrap_wrap {
+  flex-wrap: wrap;
+}
+.wrap_wrap_reverse {
+  flex-wrap: wrap-reverse;
+}
+
+// Gap
+.gap_sm {
+  gap: var(--spacing-sm);
+}
+.gap_md {
+  gap: var(--spacing-md);
+}
+.gap_lg {
+  gap: var(--spacing-lg);
+}
+.gap_xl {
+  gap: var(--spacing-xl);
+}

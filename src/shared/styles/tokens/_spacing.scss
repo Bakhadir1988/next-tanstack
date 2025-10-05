@@ -1,0 +1,26 @@
+@use '@/shared/styles/utils/functions' as *;
+
+$spacing: rem(10);
+$sm-offset: rem(20);
+$base-offset: calc($sm-offset * 2);
+$clamp-offset: clamp($sm-offset, 3vw, $base-offset);
+$section-offset-vertical: $clamp-offset;
+
+// Gaps
+$spacing-sm: rem(10);
+$spacing-md: rem(20);
+$spacing-lg: rem(28);
+$spacing-xl: rem(34);
+
+:root {
+  --spacing: #{$spacing};
+  --sm-offset: #{$sm-offset};
+  --base-offset: #{$base-offset};
+  --clamp-offset: #{$clamp-offset};
+  --section-offset-vertical: #{$section-offset-vertical};
+
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+}

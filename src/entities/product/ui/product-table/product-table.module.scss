@@ -1,0 +1,21 @@
+// src/entities/product/ui/product-table-row/product-table-row.module.scss
+
+.root {
+  // Стили для всей строки, если нужно
+  &:hover {
+    background-color: var(--color-surface-hover);
+  }
+}
+
+.thumbnail {
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.in_stock {
+  color: var(--color-success);
+}
+
+.out_of_stock {
+  color: var(--color-danger);
+}

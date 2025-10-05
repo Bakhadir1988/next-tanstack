@@ -1,7 +1,31 @@
-import type { NextConfig } from "next";
+import path from 'node:path';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  trailingSlash: true,
+  sassOptions: {
+    implementation: require.resolve('sass'),
+    includePaths: [path.join(__dirname, 'src')],
+    additionalData: `
+      @use "@/shared/styles/mixins" as *;
+      @use "@/shared/styles/utils" as *;
+    `,
+  },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'litra-adm.workup.spb.ru',
+        pathname: '/resources/catalog/**',
+      },
+    ],
+  },
+
+  // experimental: {
+  //   workerThreads: false,
+  //   cpus: 1,
+  // },
 };
 
 export default nextConfig;

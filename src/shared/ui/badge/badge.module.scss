@@ -1,0 +1,77 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  flex-shrink: 0;
+  white-space: nowrap;
+  user-select: none;
+  border: 1px solid transparent;
+}
+
+/* Sizes */
+.size_1 {
+  font-size: rem(13);
+  line-height: 1.2;
+  padding: rem(3) rem(8);
+}
+.size_2 {
+  font-size: rem(14);
+  line-height: 1.2;
+  padding: rem(5) rem(12);
+}
+.size_3 {
+  font-size: rem(16);
+  line-height: 1.2;
+  padding: rem(7) rem(16);
+}
+
+/* Radius */
+.radius_none {
+  border-radius: 0;
+}
+.radius_small {
+  border-radius: var(--radius-sm);
+}
+.radius_medium {
+  border-radius: var(--radius-md);
+}
+.radius_large {
+  border-radius: var(--radius-lg);
+}
+.radius_full {
+  border-radius: var(--radius-xl);
+}
+
+/* Variants & Colors */
+.variant_solid {
+  &.color_purple {
+    background-color: var(--color-purple);
+    color: var(--color-text-white);
+  }
+  &.color_green {
+    background-color: var(--color-green);
+    color: var(--color-text-white);
+  }
+  &.color_red {
+    background-color: var(--color-danger);
+    color: var(--color-text-white);
+  }
+}
+
+.variant_outline {
+  background-color: transparent;
+
+  &.color_purple {
+    border: 1px solid var(--color-purple);
+    color: var(--color-purple);
+  }
+  &.color_green {
+    border: 1px solid var(--color-green);
+    color: var(--color-green);
+  }
+  &.color_red {
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+  }
+}

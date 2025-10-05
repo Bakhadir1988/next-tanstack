@@ -1,0 +1,36 @@
+@use 'sass:math';
+@use 'functions' as *;
+
+// Настраиваемые параметры
+$fluid-min-vw: 320;
+$fluid-max-vw: 1920;
+$fluid-container-width: $fluid-max-vw - $fluid-min-vw;
+
+// Функция для fluid typography (возвращает rem)
+// Принимает на вход значения в px (с единицей измерения или без)
+@function fluid-size($min-size, $max-size) {
+  // Извлекаем числовые значения, даже если переданы с 'px'
+  $min-num: if(
+    math.unit($min-size) == 'px',
+    math.div($min-size, 1px),
+    $min-size
+  );
+  $max-num: if(
+    math.unit($max-size) == 'px',
+    math.div($max-size, 1px),
+    $max-size
+  );
+
+  // Рассчитываем vw коэффициент на основе px
+  $diff: $max-num - $min-num;
+  $vw-unrounded: math.div($diff, $fluid-container-width) * 100;
+  // Округляем до 4 знаков после запятой для стабильности
+  $vw: math.div(math.round($vw-unrounded * 10000), 10000);
+
+  // Конвертируем min/max в rem для clamp
+  $min-rem: rem($min-num);
+  $max-rem: rem($max-num);
+
+  // Собираем clamp() с rem
+  @return clamp(#{$min-rem}, calc(#{$min-rem} + #{$vw}vw), #{$max-rem});
+}

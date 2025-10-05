@@ -1,0 +1,21 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: rem(6);
+  font-weight: 500;
+  font-size: rem(14);
+}
+
+.in_stock {
+  color: var(--color-green);
+  svg {
+    margin-bottom: 2px;
+  }
+}
+
+.out_of_stock {
+  color: var(--color-danger);
+  svg {
+    margin-bottom: 2px;
+  }
+}

@@ -1,0 +1,55 @@
+@use '@/shared/styles/utils/fluid-typography' as *;
+
+$font-size-h1: 48px;
+$font-size-h2: 36px;
+$font-size-h3: 30px;
+$font-size-h4: 24px;
+$font-size-h5: 20px;
+$font-size-h6: 18px;
+$font-size-p: 16px;
+
+$font-size-mobile-h1: 32px;
+$font-size-mobile-h2: 24px;
+$font-size-mobile-h3: 20px;
+$font-size-mobile-h4: 18px;
+$font-size-mobile-h5: 16px;
+$font-size-mobile-h6: 14px;
+$font-size-mobile-p: 14px;
+
+:root {
+  --font-size-h1: #{fluid-size($font-size-mobile-h1, $font-size-h1)};
+  --font-size-h2: #{fluid-size($font-size-mobile-h2, $font-size-h2)};
+  --font-size-h3: #{fluid-size($font-size-mobile-h3, $font-size-h3)};
+  --font-size-h4: #{fluid-size($font-size-mobile-h4, $font-size-h4)};
+  --font-size-h5: #{fluid-size($font-size-mobile-h5, $font-size-h5)};
+  --font-size-h6: #{fluid-size($font-size-mobile-h6, $font-size-h6)};
+  --font-size-p: #{fluid-size($font-size-mobile-p, $font-size-p)};
+}
+
+:root {
+  // Веса шрифтов
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  // Высота строк
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  // Межбуквенные интервалы
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+
+  --font-family-primary: var(--font-roboto);
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
+p {
+  font-size: var(--font-size-p);
+}

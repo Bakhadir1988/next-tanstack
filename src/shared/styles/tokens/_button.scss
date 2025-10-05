@@ -1,0 +1,13 @@
+@use '@/shared/styles/utils/functions' as *;
+
+$button-height-default: rem(40);
+$button-height-sm: rem(36);
+$button-height-md: rem(40);
+$button-height-lg: rem(44);
+
+:root {
+  --button-height-default: #{$button-height-default};
+  --button-height-sm: #{$button-height-sm};
+  --button-height-md: #{$button-height-md};
+  --button-height-lg: #{$button-height-lg};
+}

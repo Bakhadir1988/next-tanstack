@@ -1,0 +1,12 @@
+// Tokens
+@use 'tokens/index' as *;
+
+// Base
+@use 'base/reset';
+@use 'base/globals';
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--container-offset);
+}
