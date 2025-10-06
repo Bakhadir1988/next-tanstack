@@ -3,7 +3,7 @@
 import { HeartIcon } from '@radix-ui/react-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useFavorites } from '@/entities/favorite'; // Импорт из сущности
+import { useFavoritesContext } from '@/entities/favorite/context/favorites-provider';
 import { ProductType } from '@/entities/product/model/product.type';
 import { favoritesApi } from '@/shared/api/list.api';
 import { Button } from '@/shared/ui';
@@ -14,7 +14,7 @@ type Props = {
 
 export const ToggleFavoriteButton = ({ product }: Props) => {
   const queryClient = useQueryClient();
-  const { isFavorite, queryKey } = useFavorites();
+  const { isFavorite, queryKey } = useFavoritesContext();
 
   const isCurrentlyFavorite = isFavorite(product.item_id);
 
