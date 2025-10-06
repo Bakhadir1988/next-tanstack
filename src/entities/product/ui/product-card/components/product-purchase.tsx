@@ -6,12 +6,7 @@ import { Button, Flex, QuantityCounter } from '@/shared/ui';
 
 import styles from './../product-card.module.scss';
 
-type ProductPurchaseProps = {
-  productId: string;
-};
-
-export const ProductPurchase = ({ productId }: ProductPurchaseProps) => {
-  console.log('Product ID for Cart:', productId);
+export const ProductPurchase = () => {
   const [quantity, setQuantity] = useState(1);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
 

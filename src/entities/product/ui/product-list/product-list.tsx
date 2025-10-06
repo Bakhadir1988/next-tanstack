@@ -34,7 +34,6 @@ export const ProductList = ({
       {title && <h2>{title}</h2>}
       <Grid
         gap="sm"
-        align="start"
         isContainer
         // Применяем разные классы для сетки в зависимости от вида
         className={clsx(

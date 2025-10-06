@@ -9,7 +9,7 @@ export type TransformedProductProperty = {
 
 export const transformProductProperties = (
   product: ProductType,
-  map: CatalogMap,
+  map?: CatalogMap,
 ): TransformedProductProperty[] => {
   if (!map) {
     return [];

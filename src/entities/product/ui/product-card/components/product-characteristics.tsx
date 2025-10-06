@@ -8,7 +8,7 @@ import styles from '../product-card.module.scss';
 
 type ProductCharacteristicsProps = {
   product: ProductType;
-  map: CatalogMap;
+  map?: CatalogMap;
 };
 
 export const ProductCharacteristics = ({

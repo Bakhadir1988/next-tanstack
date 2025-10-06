@@ -1,9 +1,10 @@
 import localFont from 'next/font/local';
 
+import { Header } from '@/widgets/header/header';
+
 import { Providers } from './providers';
 
 import type { Metadata } from 'next';
-
 import '../shared/styles/index.scss';
 
 const roboto = localFont({
@@ -43,6 +44,7 @@ export default function RootLayout({
     <html lang="en" className={roboto.variable}>
       <body className={roboto.className}>
         <Providers>
+          <Header />
           <main className="container">{children}</main>
         </Providers>
       </body>

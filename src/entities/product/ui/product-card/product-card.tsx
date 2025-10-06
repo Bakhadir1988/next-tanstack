@@ -19,15 +19,14 @@ import styles from './product-card.module.scss';
 
 type ProductCardProps = {
   product: ProductType;
-  map: CatalogMap;
+  map?: CatalogMap;
 };
 
 export const ProductCard = ({ product, map }: ProductCardProps) => {
   const controls = useAnimation();
   const MotionFlex = motion(Flex);
 
-  const { title, imgs, url, price, in_stock, rating, item_id, discount } =
-    product;
+  const { title, imgs, url, price, in_stock, rating, discount } = product;
 
   const discountPrice = Number(price) * (Number(discount) / 100);
   const discountedPrice = Number(price) - discountPrice;
@@ -50,7 +49,7 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} />
         <ProductImageSlider imgs={imgs} alt={title} />
-        <ProductActions />
+        <ProductActions {...product} />
       </Flex>
       <div className={styles.price}>
         {discount ? (
@@ -65,12 +64,14 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
       <Link href={url} className={styles.title}>
         {truncatedTitle}
       </Link>
-      <Flex align="center" justify="between">
-        <Rating rating={rating} />
-        <StockStatus in_stock={in_stock} />
+      <Flex direction="column" gap="sm" className={styles.info}>
+        <Flex align="center" justify="between">
+          <Rating rating={rating} />
+          <StockStatus in_stock={in_stock} />
+        </Flex>
+        <ProductCharacteristics product={product} map={map} />
+        <ProductPurchase />
       </Flex>
-      <ProductCharacteristics product={product} map={map} />
-      <ProductPurchase productId={item_id} />
     </MotionFlex>
   );
 };
