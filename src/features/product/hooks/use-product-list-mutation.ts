@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { useFavoritesQuery } from '@/entities/favorite/model/useFavorites';
+import { useFavoritesQuery } from '@/entities/favorite/hooks/useFavorites';
 import { ProductType } from '@/entities/product/model/product.type';
 import { favoritesApi, ListResponse } from '@/shared/api/list.api';
 

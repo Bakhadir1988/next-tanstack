@@ -5,6 +5,7 @@ import { Header } from '@/widgets/header/header';
 import { Providers } from './providers';
 
 import type { Metadata } from 'next';
+
 import '../shared/styles/index.scss';
 
 const roboto = localFont({

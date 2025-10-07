@@ -1,7 +1,6 @@
-// src/views/catalog-view/favorites/favorites.tsx
 'use client';
 
-import { useFavoritesQuery } from '@/entities/favorite/model/useFavorites';
+import { useFavoritesQuery } from '@/entities/favorite/hooks/useFavorites';
 import { ProductType } from '@/entities/product/model/product.type';
 import { ProductCard } from '@/entities/product/ui/product-card';
 import { Grid } from '@/shared/ui';
