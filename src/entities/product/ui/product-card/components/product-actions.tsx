@@ -1,9 +1,11 @@
+'use client';
+
 import { EyeOpenIcon, HeartIcon, LayersIcon } from '@radix-ui/react-icons';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { motion } from 'framer-motion';
 
-import { favoritesApi, ListResponse } from '@/shared/api/list.api';
-import { getSessionId } from '@/shared/api/session.api';
+import { ProductType } from '@/entities/product/model/product.type';
+import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { Button, Flex } from '@/shared/ui';
 
 import styles from './../product-card.module.scss';
@@ -36,60 +38,27 @@ const actionItemVariants = {
 const MotionButton = motion(Button);
 const MotionFlex = motion(Flex);
 
-export const ProductActions = ({ ...props }) => {
-  const sessionId = getSessionId();
+type ProductActionsProps = {
+  product: ProductType;
+  isFavorite?: boolean;
+};
 
-  const { item_id } = props;
-
-  const queryKey = ['favorites', sessionId];
-
-  const queryClient = useQueryClient();
-
-  const { data: favoritesData } = useQuery({
-    queryKey,
-    queryFn: () => favoritesApi.get(sessionId),
-    enabled: !!sessionId,
+export const ProductActions = ({
+  product,
+  isFavorite,
+}: ProductActionsProps) => {
+  const {
+    toggle,
+    isInList: isInListFromHook,
+    isLoading,
+  } = useProductListMutation({
+    product: product,
+    queryKey: 'favorites',
   });
 
-  const addMutation = useMutation({
-    mutationFn: () => favoritesApi.add(item_id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
-      console.log('Favorite added successfully');
-    },
-    onError: (error) => {
-      console.error('Error adding favorite:', error);
-    },
-  });
-
-  const removeMutation = useMutation({
-    mutationFn: () => favoritesApi.remove({ item_id }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
-      console.log('Favorite removed successfully');
-    },
-    onError: (error) => {
-      console.error('Error removing favorite:', error);
-    },
-  });
-
-  const isFavorite =
-    // Проверяем, что favoritesData - это объект, а не строка ошибки от API
-    typeof favoritesData === 'object' &&
-    // Безопасно проверяем наличие товара в массиве
-    (favoritesData as ListResponse)?.items?.some(
-      (item) => item.item_id === item_id,
-    );
-
-  console.log(favoritesData);
-
-  const handleToggleFavorite = () => {
-    if (isFavorite) {
-      removeMutation.mutate();
-    } else {
-      addMutation.mutate();
-    }
-  };
+  // Отдаем приоритет пропсу isFavorite, если он есть (для SSR)
+  // Иначе используем значение из хука (для CSR)
+  const finalIsInList = isFavorite ?? isInListFromHook;
 
   return (
     <MotionFlex
@@ -100,9 +69,13 @@ export const ProductActions = ({ ...props }) => {
       <MotionButton
         variant="icon"
         icon={<HeartIcon />}
-        className={styles.action_button}
-        variants={actionItemVariants}
-        onClick={handleToggleFavorite}
+        onClick={() => toggle()}
+        className={clsx(
+          styles.action_button,
+          finalIsInList && styles.action_button_active,
+        )}
+        title={finalIsInList ? 'Убрать из избранного' : 'Добавить в избранное'}
+        disabled={isLoading}
       />
       <MotionButton
         variant="icon"

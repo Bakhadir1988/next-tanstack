@@ -1,19 +1,23 @@
-'use client';
+// src/widgets/header/header.tsx (теперь это Серверный Компонент)
 
-import Link from 'next/link';
+import { cookies } from 'next/headers';
 
-import { useFavorites } from '@/entities/favorite';
+import { favoritesApi } from '@/shared/api/list.api';
+import { HeaderView } from '@/views/catalog-view/header/header-view';
 
-export const Header = () => {
-  const { favorites } = useFavorites();
+export const Header = async () => {
+  const cookieStore = await cookies();
+  const sessionId = cookieStore.get('session_id')?.value;
 
-  const favoriteCount = favorites.length;
+  let count = 0;
 
-  return (
-    <header>
-      <Link href="/">Главная</Link>
-      <Link href="/catalog/">Каталог</Link>
-      <Link href="/favorites/">Избранное ({favoriteCount})</Link>
-    </header>
-  );
+  if (sessionId) {
+    const data = await favoritesApi.get(sessionId);
+    if (typeof data === 'object' && data.items) {
+      count = data.items.length;
+    }
+  }
+
+  // Серверный компонент рендерит клиентский и передает ему данные как пропс
+  return <HeaderView initialCount={count} />;
 };

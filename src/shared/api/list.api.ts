@@ -53,7 +53,7 @@ const createListApi = (list: ListType) => {
       return fetchFromListServer(form);
     },
 
-    add: (item_id: string): Promise<ListResponse | string> => {
+    add: (item: { item_id: string }): Promise<ListResponse | string> => {
       const form = new FormData();
       const sessionId = getSessionId();
       if (sessionId) {
@@ -62,7 +62,7 @@ const createListApi = (list: ListType) => {
       form.append('comp', 'list_server');
       form.append('list', list);
       form.append('action', 'add');
-      form.append('item_id', item_id);
+      form.append('item_id', item.item_id);
       form.append('subitem_id', '');
       form.append('quantity', '1');
       return fetchFromListServer(form);

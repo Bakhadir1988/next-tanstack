@@ -1,43 +1,28 @@
+// src/views/catalog-view/favorites/favorites.tsx
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-
+import { useFavoritesQuery } from '@/entities/favorite/model/useFavorites';
+import { ProductType } from '@/entities/product/model/product.type';
 import { ProductCard } from '@/entities/product/ui/product-card';
-import { favoritesApi, ListResponse } from '@/shared/api/list.api';
 import { Grid } from '@/shared/ui';
 
+// 1. Принимаем sessionId
 type FavoritesViewProps = {
-  sessionId?: string;
-  initialData: ListResponse | string;
+  initialItems: ProductType[];
+  sessionId: string | undefined;
 };
 
 export const FavoritesView = ({
+  initialItems,
   sessionId,
-  initialData,
 }: FavoritesViewProps) => {
-  const { data, isLoading, isError } = useQuery<ListResponse | string>({
-    queryKey: ['favorites', sessionId],
-    queryFn: () => favoritesApi.get(sessionId || ''),
-    enabled: !!sessionId,
-    initialData: initialData,
-  });
-
-  // Определяем items безопасно
-  const items =
-    typeof data === 'string'
-      ? [] // API вернул текст вместо JSON
-      : (data?.items ?? []);
-
-  if (isLoading) return <p>Загрузка...</p>;
-  if (isError) return <p>Ошибка при загрузке избранного</p>;
-  if (!items.length) return <p>Нет избранных товаров</p>;
-
-  console.log(items);
+  const { items } = useFavoritesQuery({ initialItems, sessionId });
 
   return (
     <Grid columns="repeat(4, 1fr)" gap="md">
       {items.map((item) => (
-        <ProductCard key={item.item_id} product={item} />
+        // Передаем информацию о том, что этот товар в избранном
+        <ProductCard key={item.item_id} product={item} isFavorite={true} />
       ))}
     </Grid>
   );

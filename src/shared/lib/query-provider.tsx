@@ -1,12 +1,8 @@
-// In Next.js, this file would be called: app/providers.tsx
 'use client';
 
-// Since QueryClientProvider relies on useContext under the hood, we have to put 'use client' on top
-import {
-  isServer,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import React from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function makeQueryClient() {
@@ -14,8 +10,12 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 60 * 1000,
+        // to avoid refetching immediately on the client
+        staleTime: Infinity, // Data will never be considered stale
+        refetchOnWindowFocus: false, // Do not refetch on window focus
+        refetchOnMount: false, // Do not refetch on mount
+        refetchOnReconnect: false, // Do not refetch on reconnect
+        retry: false, // Do not retry failed requests
       },
     },
   });
@@ -24,7 +24,7 @@ function makeQueryClient() {
 let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
-  if (isServer) {
+  if (typeof window === 'undefined') {
     return makeQueryClient();
   } else {
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
