@@ -76,18 +76,23 @@ export const ProductActions = ({
         )}
         title={finalIsInList ? 'Убрать из избранного' : 'Добавить в избранное'}
         disabled={isLoading}
+        aria-label={
+          finalIsInList ? 'Убрать из избранного' : 'Добавить в избранное'
+        }
       />
       <MotionButton
         variant="icon"
         icon={<LayersIcon />}
         className={styles.action_button}
         variants={actionItemVariants}
+        aria-label="Сравнить товары"
       />
       <MotionButton
         variant="icon"
         icon={<EyeOpenIcon />}
         className={styles.action_button}
         variants={actionItemVariants}
+        aria-label="Просмотреть товар"
       />
     </MotionFlex>
   );

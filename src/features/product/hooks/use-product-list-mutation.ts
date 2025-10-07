@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFavoritesQuery } from '@/entities/favorite/hooks/useFavorites';
 import { ProductType } from '@/entities/product/model/product.type';
 import { favoritesApi, ListResponse } from '@/shared/api/list.api';
+import { ListProductType } from '@/shared/types/list.product.type';
 
 type UseProductListMutationProps = {
   product: ProductType;
@@ -57,8 +58,25 @@ export const useProductListMutation = ({
       queryClient.setQueryData<ListResponse>(
         [queryKey, sessionId],
         (oldData) => {
+          const newFavoriteItem: ListProductType = {
+            id: `temp-${product.item_id}`,
+            item_id: product.item_id,
+            price: product.price || '0',
+            title: product.title,
+            url: product.url,
+            rec_type: 'fav',
+            ts: String(Date.now() / 1000),
+            quantity: '1',
+            total: Number(product.price || '0'),
+            data: product, // Вкладываем полный объект продукта
+          };
+
           if (!oldData) {
-            return { items: [product], total_cost: 0, total_quantity: 0 };
+            return {
+              items: [newFavoriteItem],
+              total_cost: 0,
+              total_quantity: 0,
+            };
           }
 
           if (isInList) {
@@ -70,10 +88,22 @@ export const useProductListMutation = ({
               ),
             };
           } else {
-            // Оптимистично добавляем товар
+            // Оптимистично добавляем товар, создавая временный объект ListProductType
+            const newFavoriteItem: ListProductType = {
+              id: `temp-${product.item_id}`,
+              item_id: product.item_id,
+              price: product.price || '0',
+              title: product.title,
+              url: product.url,
+              rec_type: 'fav',
+              ts: String(Date.now() / 1000),
+              quantity: '1',
+              total: Number(product.price || '0'),
+              data: product,
+            };
             return {
               ...oldData,
-              items: [...oldData.items, product],
+              items: [...oldData.items, newFavoriteItem],
             };
           }
         },

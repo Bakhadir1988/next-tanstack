@@ -1,11 +1,11 @@
-import { ProductType } from '@/entities/product/model/product.type';
+import { ListProductType } from '@/shared/types/list.product.type';
 
 import { API_BASE_URL } from '../config/site.config';
 
 import { getSessionId } from './session.api';
 
 export type ListResponse = {
-  items: ProductType[];
+  items: ListProductType[];
   total_cost?: number;
   total_quantity?: number;
 };
