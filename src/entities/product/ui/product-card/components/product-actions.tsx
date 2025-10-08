@@ -3,54 +3,60 @@
 import { EyeOpenIcon, HeartIcon, LayersIcon } from '@radix-ui/react-icons';
 import clsx from 'clsx';
 
+import { useProductListContext } from '@/entities/product/model/product-list-context';
 import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
-import { useProductListMutationCompare } from '@/features/product/hooks/use-product-list-mutation-comapre';
+import { compareApi, favoritesApi } from '@/shared/api/list.api';
 import { Button, Flex } from '@/shared/ui';
 
 import styles from './../product-card.module.scss';
 
+// --- Компонент ---
 type ProductActionsProps = {
   product: ProductType;
-  isFavorite?: boolean;
-  isCompare?: boolean;
 };
 
-export const ProductActions = ({
-  product,
-  isFavorite,
-  isCompare,
-}: ProductActionsProps) => {
-  const { toggle, isInList: isInListFromHook } = useProductListMutation({
-    product: product,
-    queryKey: 'favorites',
-  });
-  const { toggle: toggleCompare, isInList: isInListFromHookCompare } =
-    useProductListMutationCompare({
+export const ProductActions = ({ product }: ProductActionsProps) => {
+  // 1. Получаем ID из контекста
+  const { favoriteIds, compareIds } = useProductListContext();
+
+  // 2. Определяем состояние для каждого списка
+  const isFavorite = favoriteIds.has(product.item_id);
+  const isCompare = compareIds.has(product.item_id);
+
+
+  // 3. Используем универсальный хук для ИЗБРАННОГО
+  const { toggle: toggleFavorite, isLoading: isFavoriteLoading } =
+    useProductListMutation({
       product: product,
-      queryKey: 'compare',
+      isInList: isFavorite,
+      queryKey: 'favorites',
+      api: favoritesApi,
     });
 
-  // Отдаем приоритет пропсу isFavorite, если он есть (для SSR)
-  // Иначе используем значение из хука (для CSR)
-  const isInListFavorite = isFavorite ?? isInListFromHook;
-  const isInListCompare = isCompare ?? isInListFromHookCompare;
+  // 4. Используем универсальный хук для СРАВНЕНИЯ
+  const { toggle: toggleCompare, isLoading: isCompareLoading } =
+    useProductListMutation({
+      product: product,
+      isInList: isCompare,
+      queryKey: 'compare',
+      api: compareApi,
+    });
 
   return (
     <Flex direction="column" className={styles.actions}>
       <Button
         variant="icon"
         icon={<HeartIcon />}
-        onClick={() => toggle()}
+        onClick={() => toggleFavorite()}
         className={clsx(
           styles.action_button,
-          isInListFavorite && styles.action_button_active,
+          isFavorite && styles.action_button_active,
         )}
-        title={
-          isInListFavorite ? 'Убрать из избранного' : 'Добавить в избранное'
-        }
+        title={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
+        disabled={isFavoriteLoading}
         aria-label={
-          isInListFavorite ? 'Убрать из избранного' : 'Добавить в избранное'
+          isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'
         }
       />
       <Button
@@ -59,12 +65,11 @@ export const ProductActions = ({
         onClick={() => toggleCompare()}
         className={clsx(
           styles.action_button,
-          isInListCompare && styles.action_button_active,
+          isCompare && styles.action_button_active,
         )}
-        title={isInListCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}
-        aria-label={
-          isInListCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'
-        }
+        title={isCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}
+        disabled={isCompareLoading}
+        aria-label={isCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}
       />
       <Button
         variant="icon"

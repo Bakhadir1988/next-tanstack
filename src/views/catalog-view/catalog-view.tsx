@@ -13,7 +13,6 @@ import { ProductListToolbar } from '@/widgets';
 
 export const CatalogView = () => {
   const pathname = usePathname();
-
   const [view, setView] = useState<SegmentControlValue>('block');
 
   const { data: catalogData, error } = useQuery({
@@ -26,6 +25,7 @@ export const CatalogView = () => {
 
   const { items, section, map } = catalogData || {};
 
+  // Контекст теперь предоставляется глобально, поэтому здесь он не нужен.
   return (
     <div>
       <Heading as="h1" size="1">

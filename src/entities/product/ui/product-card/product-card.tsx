@@ -20,16 +20,9 @@ import styles from './product-card.module.scss';
 type ProductCardProps = {
   product: ProductType;
   map?: CatalogMap;
-  isFavorite?: boolean;
-  isCompare?: boolean;
 };
 
-export const ProductCard = ({
-  product,
-  map,
-  isFavorite,
-  isCompare,
-}: ProductCardProps) => {
+export const ProductCard = ({ product, map }: ProductCardProps) => {
   const controls = useAnimation();
   const MotionFlex = motion(Flex);
 
@@ -56,11 +49,7 @@ export const ProductCard = ({
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} />
         <ProductImageSlider imgs={imgs} alt={title} />
-        <ProductActions
-          product={product}
-          isFavorite={isFavorite}
-          isCompare={isCompare}
-        />
+        <ProductActions product={product} />
       </Flex>
       <div className={styles.price}>
         {discount ? (
