@@ -1,42 +1,46 @@
-import React, { useState } from 'react';
-
 import Link from 'next/link';
 
+import { useProductListContext } from '@/entities/product/model/product-list-context';
+import { ProductType } from '@/entities/product/model/product.type';
+import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
+import { cartApi } from '@/shared/api/list.api';
 import { Button, Flex, QuantityCounter } from '@/shared/ui';
 
 import styles from './../product-card.module.scss';
 
-export const ProductPurchase = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
+type ProductPurchaseProps = {
+  product: ProductType;
+};
 
-  const handleQuantityChange = (newQuantity: number) => {
-    setQuantity(newQuantity);
-  };
+export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
+  const { cartIds } = useProductListContext();
 
-  const handleAddToCart = () => {
-    setIsAddedToCart(true);
-  };
+  const isCart = cartIds.has(product.item_id);
+
+  // 5. Используем универсальный хук для КОРЗИНЫ
+  const { toggle: toggleCart } = useProductListMutation({
+    product: product,
+    isInList: isCart,
+    queryKey: 'cart',
+    api: cartApi,
+  });
 
   return (
     <Flex direction="column" gap="sm" className={styles.purchase}>
       <Flex gap="sm" className={styles.purchase_wrapper}>
-        {isAddedToCart ? (
+        {isCart ? (
           <Button variant="primary" asChild className={styles.add_button}>
-            <Link href="/cart">В корзине {quantity} шт.</Link>
+            <Link href="/cart">В корзине {1} шт.</Link>
           </Button>
         ) : (
           <>
             <div className={styles.quantity_control}>
-              <QuantityCounter
-                value={quantity}
-                onChange={handleQuantityChange}
-              />
+              <QuantityCounter value={1} onChange={() => {}} />
             </div>
             <Button
               variant="primary"
               className={styles.add_button}
-              onClick={handleAddToCart}
+              onClick={() => toggleCart()}
             >
               В корзину
             </Button>

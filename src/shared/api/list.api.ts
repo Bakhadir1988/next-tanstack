@@ -10,7 +10,7 @@ export type ListResponse = {
   total_quantity?: number;
 };
 
-type ListType = 'fav' | 'compare';
+type ListType = 'fav' | 'compare' | 'cart';
 
 async function fetchFromListServer(
   form: FormData,
@@ -87,3 +87,4 @@ const createListApi = (list: ListType) => {
 
 export const favoritesApi = createListApi('fav');
 export const compareApi = createListApi('compare');
+export const cartApi = createListApi('cart');

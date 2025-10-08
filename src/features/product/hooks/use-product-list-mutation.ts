@@ -10,7 +10,7 @@ import { ListProductType } from '@/shared/types/list.product.type';
 type UseProductListMutationProps = {
   product: ProductType;
   isInList: boolean; // Теперь обязательный проп
-  queryKey: 'favorites' | 'compare';
+  queryKey: 'favorites' | 'compare' | 'cart';
   api: typeof favoritesApi; // Позволяет передавать нужный API
 };
 

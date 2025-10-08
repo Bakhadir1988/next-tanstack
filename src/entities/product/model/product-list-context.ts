@@ -6,12 +6,14 @@ import { createContext, useContext } from 'react';
 type ProductListContextType = {
   favoriteIds: Set<string>;
   compareIds: Set<string>;
+  cartIds: Set<string>;
 };
 
 // Создаем контекст с пустыми значениями по умолчанию
 export const ProductListContext = createContext<ProductListContextType>({
   favoriteIds: new Set(),
   compareIds: new Set(),
+  cartIds: new Set(),
 });
 
 // Создаем кастомный хук для удобного доступа к контексту

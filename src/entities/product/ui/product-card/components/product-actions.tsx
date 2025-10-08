@@ -24,7 +24,6 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
   const isFavorite = favoriteIds.has(product.item_id);
   const isCompare = compareIds.has(product.item_id);
 
-
   // 3. Используем универсальный хук для ИЗБРАННОГО
   const { toggle: toggleFavorite, isLoading: isFavoriteLoading } =
     useProductListMutation({
