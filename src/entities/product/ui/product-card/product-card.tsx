@@ -21,9 +21,15 @@ type ProductCardProps = {
   product: ProductType;
   map?: CatalogMap;
   isFavorite?: boolean;
+  isCompare?: boolean;
 };
 
-export const ProductCard = ({ product, map, isFavorite }: ProductCardProps) => {
+export const ProductCard = ({
+  product,
+  map,
+  isFavorite,
+  isCompare,
+}: ProductCardProps) => {
   const controls = useAnimation();
   const MotionFlex = motion(Flex);
 
@@ -50,7 +56,11 @@ export const ProductCard = ({ product, map, isFavorite }: ProductCardProps) => {
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} />
         <ProductImageSlider imgs={imgs} alt={title} />
-        <ProductActions product={product} isFavorite={isFavorite} />
+        <ProductActions
+          product={product}
+          isFavorite={isFavorite}
+          isCompare={isCompare}
+        />
       </Flex>
       <div className={styles.price}>
         {discount ? (

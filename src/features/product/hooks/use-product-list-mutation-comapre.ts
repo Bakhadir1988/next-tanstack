@@ -5,8 +5,8 @@ import { useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
-import { useFavoritesQuery } from '@/features/favorite/hooks/useFavorites';
-import { favoritesApi, ListResponse } from '@/shared/api/list.api';
+import { useCompareQuery } from '@/features/compare/hooks/useCompare';
+import { compareApi, ListResponse } from '@/shared/api/list.api';
 import { ListProductType } from '@/shared/types/list.product.type';
 
 type UseProductListMutationProps = {
@@ -20,17 +20,16 @@ type UseProductListMutationProps = {
  * @param product - Полный объект продукта для мутации.
  * @param queryKey - Ключ списка ('favorites' или 'compare'), который нужно мутировать.
  */
-export const useProductListMutation = ({
+export const useProductListMutationCompare = ({
   product,
   queryKey,
 }: UseProductListMutationProps) => {
   const queryClient = useQueryClient();
 
-  // Используем основной query-хук как единый источник правды о списке избранного.
-  // Это гарантирует, что данные будут загружены, если их нет в кэше.
-  const { items, sessionId } = useFavoritesQuery({});
+  // Используем правильный хук в зависимости от queryKey
+  const { items, sessionId } = useCompareQuery({});
 
-  // Проверяем, находится ли текущий продукт в списке, полученном из useFavoritesQuery.
+  // Проверяем, находится ли текущий продукт в списке.
   const isInList = useMemo(
     () => items.some((item) => item.item_id === product.item_id),
     [items, product.item_id],
@@ -39,7 +38,7 @@ export const useProductListMutation = ({
   const mutation = useMutation({
     mutationFn: () => {
       // В зависимости от состояния, выбираем нужный метод API для вызова.
-      const apiAction = isInList ? favoritesApi.remove : favoritesApi.add;
+      const apiAction = isInList ? compareApi.remove : compareApi.add;
       return apiAction({ item_id: product.item_id });
     },
 
@@ -58,13 +57,13 @@ export const useProductListMutation = ({
       queryClient.setQueryData<ListResponse>(
         [queryKey, sessionId],
         (oldData) => {
-          const newFavoriteItem: ListProductType = {
+          const newItem: ListProductType = {
             id: `temp-${product.item_id}`,
             item_id: product.item_id,
             price: product.price || '0',
             title: product.title,
             url: product.url,
-            rec_type: 'fav',
+            rec_type: queryKey === 'favorites' ? 'fav' : 'compare',
             ts: String(Date.now() / 1000),
             quantity: '1',
             total: Number(product.price || '0'),
@@ -73,7 +72,7 @@ export const useProductListMutation = ({
 
           if (!oldData) {
             return {
-              items: [newFavoriteItem],
+              items: [newItem],
               total_cost: 0,
               total_quantity: 0,
             };
@@ -88,22 +87,10 @@ export const useProductListMutation = ({
               ),
             };
           } else {
-            // Оптимистично добавляем товар, создавая временный объект ListProductType
-            const newFavoriteItem: ListProductType = {
-              id: `temp-${product.item_id}`,
-              item_id: product.item_id,
-              price: product.price || '0',
-              title: product.title,
-              url: product.url,
-              rec_type: 'fav',
-              ts: String(Date.now() / 1000),
-              quantity: '1',
-              total: Number(product.price || '0'),
-              data: product,
-            };
+            // Oптимистично добавляем товар
             return {
               ...oldData,
-              items: [...oldData.items, newFavoriteItem],
+              items: [...oldData.items, newItem],
             };
           }
         },

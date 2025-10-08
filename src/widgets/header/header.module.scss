@@ -1,0 +1,82 @@
+.header {
+  width: 100%;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 2rem;
+}
+
+.left_section {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+
+  svg {
+    width: 32px;
+    height: 32px;
+    color: var(--color-primary);
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav_link {
+  font-weight: 500;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.right_section {
+  gap: var(--spacing-md);
+}
+
+.action_link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
+
+.action_label {
+  font-size: rem(14);
+}
+
+.icon_wrapper {
+  position: relative;
+  display: flex;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+  width: rem(17);
+  height: rem(17);
+}

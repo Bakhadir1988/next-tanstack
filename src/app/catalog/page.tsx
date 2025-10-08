@@ -6,7 +6,7 @@ import {
 
 import { catalogApi } from '@/shared/api/catalog.api';
 import { API_PATHS } from '@/shared/config/site.config';
-import { CatalogView } from '@/views/catalog-view/catalog-view';
+import { CatalogView } from '@/views';
 
 export default async function CatalogMainPage() {
   const queryClient = new QueryClient();
