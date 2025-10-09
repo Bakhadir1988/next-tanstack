@@ -72,7 +72,7 @@ export const Header = () => {
                   </Badge>
                 )}
               </div>
-              <span className={styles.action_label}>Корзина</span>
+              <span className={styles.action_label}>Сравнение</span>
             </Link>
 
             <Link href="/cart" className={styles.action_link}>
@@ -84,7 +84,7 @@ export const Header = () => {
                   </Badge>
                 )}
               </div>
-              <span className={styles.action_label}>Сравнение</span>
+              <span className={styles.action_label}>Корзина</span>
             </Link>
           </Flex>
         </Flex>

@@ -1,46 +1,58 @@
-// 'use client';
+'use client';
 
-// import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { useQuery } from '@tanstack/react-query';
 
-// import { CartSummary } from '@/entities/product/ui/cart-summary/cart-summary';
-// import { useProductListQuery } from '@/features/product/hooks/use-product-list-query';
-// import { ListProductType } from '@/shared/types/list.product.type';
-// import { Grid, Heading } from '@/shared/ui';
-// import { EmptyState } from '@/shared/ui/empty-state';
+import { ProductType } from '@/entities/product/model/product.type';
+import { CartProductRow } from '@/entities/product/ui/cart-product-row/cart-product-row';
+import { CartSummary } from '@/entities/product/ui/cart-summary/cart-summary';
+import { cartApi, ListResponse } from '@/shared/api/list.api';
+import { useSession } from '@/shared/lib/session.context';
+import { Flex, Grid, Heading } from '@/shared/ui';
+import { EmptyState } from '@/shared/ui/empty-state';
 
-// import styles from './cart-view.module.scss';
+import styles from './cart-view.module.scss';
 
-// type CartViewProps = {
-//   initialItems: ListProductType[];
-//   sessionId: string | undefined;
-// };
+export const CartView = () => {
+  const sessionId = useSession();
 
-// export const CartView = ({ initialItems, sessionId }: CartViewProps) => {
-//   const { items } = useProductListQuery({
-//     initialItems,
-//     sessionId,
-//     queryKey: 'cart',
-//   });
+  const { data } = useQuery<ListResponse>({
+    queryKey: ['cart', sessionId],
+    queryFn: () => cartApi.get(sessionId),
+    enabled: !!sessionId,
+  });
 
-//   return (
-//     <>
-//       <Heading as="h1">Корзина</Heading>
-//       {!items.length ? (
-//         <EmptyState
-//           icon={<MixerHorizontalIcon width={50} height={50} />}
-//           title="Нет товаров в корзине"
-//           description="Добавьте товары в корзину, чтобы отслеживать их цену и наличие."
-//         />
-//       ) : (
-//         <Grid columns="1fr 300px" gap="md" className={styles.root}>
-//           <div>
-//             {items.map((product) => (
-//               <CartProductRow key={product.item_id} product={product} />
-//             ))}
-//           </div>
-//           <CartSummary />
-//         </Grid>
-//       )}
-//     </>
-//   );
-// };
+  const items: ProductType[] = (data?.items ?? []).map((item) => ({
+    ...item.data,
+    url: item.url,
+  }));
+
+  console.log(items);
+
+  return (
+    <>
+      <Heading as="h1">Корзина</Heading>
+      {!items.length ? (
+        <EmptyState
+          icon={<MixerHorizontalIcon width={50} height={50} />}
+          title="Нет товаров в корзине"
+          description="Добавьте товары в корзину, чтобы отслеживать их цену и наличие."
+        />
+      ) : (
+        <Grid
+          columns="1fr 350px"
+          gap="md"
+          align="start"
+          className={styles.root}
+        >
+          <Flex direction="column">
+            {items.map((product) => (
+              <CartProductRow key={product.item_id} product={product} />
+            ))}
+          </Flex>
+          <CartSummary />
+        </Grid>
+      )}
+    </>
+  );
+};

@@ -36,7 +36,12 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
     <Flex direction="column" gap="sm" className={styles.purchase}>
       <Flex gap="sm" className={styles.purchase_wrapper}>
         {isCart ? (
-          <Button variant="primary" asChild className={styles.add_button}>
+          <Button
+            variant="primary"
+            size="sm"
+            asChild
+            className={styles.add_button}
+          >
             <Link href="/cart">В корзине {1} шт.</Link>
           </Button>
         ) : (
@@ -46,6 +51,7 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
             </div>
             <Button
               variant="primary"
+              size="sm"
               className={styles.add_button}
               onClick={() => toggleCart({ product })}
             >
@@ -54,7 +60,7 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
           </>
         )}
       </Flex>
-      <Button variant="outline" className={styles.buy_button}>
+      <Button variant="outline" size="sm" className={styles.buy_button}>
         Купить в один клик
       </Button>
     </Flex>

@@ -1,3 +1,21 @@
 .root {
-  padding: var(--sp);
+  position: sticky;
+  top: rem(20);
+}
+
+.total_price {
+  font-size: rem(24);
+  line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
+}
+
+.summary {
+  border: 1px solid var(--color-border);
+  padding: rem(25);
+  border-radius: var(--radius-lg);
+}
+
+.clear_button {
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-normal);
 }
