@@ -17,10 +17,7 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
 
   const isCart = cartIds.has(product.item_id);
 
-  // 5. Используем универсальный хук для КОРЗИНЫ
   const { toggle: toggleCart } = useProductListMutation({
-    product: product,
-    isInList: isCart,
     queryKey: 'cart',
     api: cartApi,
   });
@@ -40,7 +37,7 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
             <Button
               variant="primary"
               className={styles.add_button}
-              onClick={() => toggleCart()}
+              onClick={() => toggleCart({ product })}
             >
               В корзину
             </Button>

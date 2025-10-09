@@ -27,8 +27,6 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
   // 3. Используем универсальный хук для ИЗБРАННОГО
   const { toggle: toggleFavorite, isLoading: isFavoriteLoading } =
     useProductListMutation({
-      product: product,
-      isInList: isFavorite,
       queryKey: 'favorites',
       api: favoritesApi,
     });
@@ -36,8 +34,6 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
   // 4. Используем универсальный хук для СРАВНЕНИЯ
   const { toggle: toggleCompare, isLoading: isCompareLoading } =
     useProductListMutation({
-      product: product,
-      isInList: isCompare,
       queryKey: 'compare',
       api: compareApi,
     });
@@ -47,7 +43,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
       <Button
         variant="icon"
         icon={<HeartIcon />}
-        onClick={() => toggleFavorite()}
+        onClick={() => toggleFavorite({ product })}
         className={clsx(
           styles.action_button,
           isFavorite && styles.action_button_active,
@@ -61,7 +57,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
       <Button
         variant="icon"
         icon={<LayersIcon />}
-        onClick={() => toggleCompare()}
+        onClick={() => toggleCompare({ product })}
         className={clsx(
           styles.action_button,
           isCompare && styles.action_button_active,
