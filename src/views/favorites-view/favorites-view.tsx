@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
 import { ProductCard } from '@/entities/product/ui/product-card';
-import { compareApi, ListResponse } from '@/shared/api/list.api';
+import { favoritesApi, ListResponse } from '@/shared/api/list.api';
 import { useSession } from '@/shared/lib/session.context';
 import { Grid, Heading } from '@/shared/ui';
 import { EmptyState } from '@/shared/ui/empty-state';
@@ -15,7 +15,7 @@ export const FavoritesView = () => {
 
   const { data } = useQuery<ListResponse>({
     queryKey: ['favorites', sessionId],
-    queryFn: () => compareApi.get(sessionId),
+    queryFn: () => favoritesApi.get(sessionId),
     enabled: !!sessionId,
   });
 

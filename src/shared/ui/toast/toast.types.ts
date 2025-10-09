@@ -6,4 +6,5 @@ export type ToastProps = ComponentProps<typeof Toast.Root> & {
   title: string;
   description?: string;
   image?: string[];
+  href?: string;
 };

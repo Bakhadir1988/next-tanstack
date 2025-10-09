@@ -5,6 +5,7 @@ import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { cartApi } from '@/shared/api/list.api';
 import { Button, Flex, QuantityCounter } from '@/shared/ui';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './../product-card.module.scss';
 
@@ -13,6 +14,7 @@ type ProductPurchaseProps = {
 };
 
 export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
+  const { addToast } = useToast();
   const { cartIds } = useProductListContext();
 
   const isCart = cartIds.has(product.item_id);
@@ -20,6 +22,14 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
   const { toggle: toggleCart } = useProductListMutation({
     queryKey: 'cart',
     api: cartApi,
+    onSuccessAction: (isAdded) => {
+      addToast({
+        image: product.imgs,
+        description: product.title,
+        href: isAdded ? '/cart/' : undefined,
+        title: isAdded ? 'Добавлено в корзину' : 'Удалено из корзины',
+      });
+    },
   });
 
   return (

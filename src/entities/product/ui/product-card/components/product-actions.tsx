@@ -31,10 +31,11 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     useProductListMutation({
       queryKey: 'favorites',
       api: favoritesApi,
-      onSuccess: (isAdded) => {
+      onSuccessAction: (isAdded) => {
         addToast({
           image: product.imgs,
           description: product.title,
+          href: isAdded ? `/favorites/` : undefined,
           title: isAdded ? 'Добавлено в избранное' : 'Удалено из избранного',
         });
       },
@@ -45,8 +46,11 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     useProductListMutation({
       queryKey: 'compare',
       api: compareApi,
-      onSuccess: (isAdded) => {
+      onSuccessAction: (isAdded) => {
         addToast({
+          image: product.imgs,
+          description: product.title,
+          href: isAdded ? `/compare/` : undefined,
           title: isAdded ? 'Добавлено в сравнение' : 'Удалено из сравнения',
         });
       },

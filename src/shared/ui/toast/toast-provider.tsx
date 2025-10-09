@@ -1,6 +1,7 @@
 'use client';
 
 import * as Toast from '@radix-ui/react-toast';
+import { AnimatePresence } from 'framer-motion';
 
 import { ToastUI } from './toast';
 import styles from './toast.module.scss';
@@ -10,20 +11,20 @@ export const ToastProvider = () => {
   const { toasts, removeToast } = useToast();
 
   return (
-    <Toast.Provider swipeDirection="right">
-      {toasts.map((toast) => (
-        <ToastUI
-          key={toast.id}
-          {...toast}
-          onOpenChange={(open) => {
-            if (!open) {
-              setTimeout(() => {
+    <Toast.Provider swipeDirection="up">
+      <AnimatePresence>
+        {toasts.map((toast) => (
+          <ToastUI
+            key={toast.id}
+            {...toast}
+            onOpenChange={(open) => {
+              if (!open) {
                 removeToast(toast.id!);
-              }, 100);
-            }
-          }}
-        />
-      ))}
+              }
+            }}
+          />
+        ))}
+      </AnimatePresence>
       <Toast.Viewport className={styles.viewport} />
     </Toast.Provider>
   );
