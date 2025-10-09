@@ -9,3 +9,4 @@ export { StockStatus } from './stock-status';
 export { Input } from './input';
 export { Textarea } from './textarea';
 export { QuantityCounter } from './quantity-counter';
+export * from './toast';

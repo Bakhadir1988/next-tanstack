@@ -8,6 +8,7 @@ import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { compareApi, favoritesApi } from '@/shared/api/list.api';
 import { Button, Flex } from '@/shared/ui';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './../product-card.module.scss';
 
@@ -17,6 +18,7 @@ type ProductActionsProps = {
 };
 
 export const ProductActions = ({ product }: ProductActionsProps) => {
+  const { addToast } = useToast();
   // 1. Получаем ID из контекста
   const { favoriteIds, compareIds } = useProductListContext();
 
@@ -29,6 +31,13 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     useProductListMutation({
       queryKey: 'favorites',
       api: favoritesApi,
+      onSuccess: (isAdded) => {
+        addToast({
+          image: product.imgs,
+          description: product.title,
+          title: isAdded ? 'Добавлено в избранное' : 'Удалено из избранного',
+        });
+      },
     });
 
   // 4. Используем универсальный хук для СРАВНЕНИЯ
@@ -36,6 +45,11 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     useProductListMutation({
       queryKey: 'compare',
       api: compareApi,
+      onSuccess: (isAdded) => {
+        addToast({
+          title: isAdded ? 'Добавлено в сравнение' : 'Удалено из сравнения',
+        });
+      },
     });
 
   return (

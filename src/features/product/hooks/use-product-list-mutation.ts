@@ -9,6 +9,7 @@ import { useSession } from '@/shared/lib/session.context';
 type UseProductListMutationProps = {
   queryKey: string;
   api: typeof favoritesApi;
+  onSuccess?: (isAdded: boolean) => void;
 };
 
 type MutationVariables = {
@@ -18,12 +19,13 @@ type MutationVariables = {
 export const useProductListMutation = ({
   queryKey,
   api,
+  onSuccess,
 }: UseProductListMutationProps) => {
   const queryClient = useQueryClient();
   const sessionId = useSession();
 
-  const mutation = useMutation<unknown, Error, MutationVariables>({
-    mutationFn: ({ product }) => {
+  const mutation = useMutation<boolean, Error, MutationVariables>({
+    mutationFn: async ({ product }) => {
       const data = queryClient.getQueryData<ListResponse>([
         queryKey,
         sessionId,
@@ -32,11 +34,13 @@ export const useProductListMutation = ({
         data?.items.some((item) => item.item_id === product.item_id) ?? false;
 
       const apiAction = isInList ? api.remove : api.add;
-      return apiAction({ item_id: product.item_id }, sessionId);
+      await apiAction({ item_id: product.item_id }, sessionId);
+      return !isInList;
     },
 
-    onSuccess: () => {
+    onSuccess: (isAdded) => {
       queryClient.invalidateQueries({ queryKey: [queryKey, sessionId] });
+      onSuccess?.(isAdded);
     },
   });
 

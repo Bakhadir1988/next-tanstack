@@ -5,6 +5,7 @@ import { HydrationBoundary, type DehydratedState } from '@tanstack/react-query';
 import { ProductListProvider } from '@/entities/product/model/product-list-provider';
 import QueryProvider from '@/shared/lib/query-provider';
 import { SessionProvider } from '@/shared/lib/session-provider';
+import { ToastProvider } from '@/shared/ui/toast';
 
 export function Providers({
   children,
@@ -19,7 +20,10 @@ export function Providers({
     <SessionProvider sessionId={sessionId}>
       <QueryProvider>
         <HydrationBoundary state={dehydratedState}>
-          <ProductListProvider>{children}</ProductListProvider>
+          <ProductListProvider>
+            {children}
+            <ToastProvider />
+          </ProductListProvider>
         </HydrationBoundary>
       </QueryProvider>
     </SessionProvider>
