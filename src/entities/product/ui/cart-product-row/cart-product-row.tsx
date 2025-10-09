@@ -5,14 +5,12 @@ import Link from 'next/link';
 
 import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
-import { compareApi, favoritesApi } from '@/shared/api/list.api';
+import { cartApi, compareApi, favoritesApi } from '@/shared/api/list.api';
 import { NEXT_PUBLIC_IMAGE_URL } from '@/shared/config/site.config';
 import {
   Badge,
   Button,
   Flex,
-  Grid,
-  Heading,
   QuantityCounter,
   Rating,
   useToast,
@@ -61,6 +59,19 @@ export const CartProductRow = ({ product }: CartProductRowProps) => {
           description: product.title,
           href: isAdded ? `/compare/` : undefined,
           title: isAdded ? 'Добавлено в сравнение' : 'Удалено из сравнения',
+        });
+      },
+    });
+
+  const { toggle: toggleCart, isLoading: isCartLoading } =
+    useProductListMutation({
+      queryKey: 'cart',
+      api: cartApi,
+      onSuccessAction: (isAdded) => {
+        addToast({
+          image: product.imgs,
+          description: product.title,
+          title: isAdded ? 'Добавлено в корзину' : 'Удалено из корзины',
         });
       },
     });
@@ -162,6 +173,8 @@ export const CartProductRow = ({ product }: CartProductRowProps) => {
           variant="icon"
           icon={<TrashIcon />}
           aria-label="Удалить из корзины"
+          onClick={() => toggleCart({ product })}
+          disabled={isCartLoading}
         />
       </div>
     </div>

@@ -1,7 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
-import { cartApi, compareApi, favoritesApi } from '@/shared/api/list.api';
+import {
+  cartApi,
+  compareApi,
+  favoritesApi,
+  ListResponse,
+} from '@/shared/api/list.api';
 import { useSession } from '@/shared/lib/session.context';
 
 // 1. Тип для пропсов хука. queryKey - обязательный.
@@ -12,7 +17,7 @@ type UseProductListQueryProps = {
 export const useProductListQuery = ({ queryKey }: UseProductListQueryProps) => {
   const sessionId = useSession();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<ListResponse>({
     queryKey: [queryKey, sessionId],
 
     queryFn: () => {
@@ -28,7 +33,7 @@ export const useProductListQuery = ({ queryKey }: UseProductListQueryProps) => {
           api = cartApi;
           break;
         default:
-          return Promise.resolve({ items: [] });
+          throw new Error(`Invalid queryKey: ${queryKey}`);
       }
       return api.get(sessionId);
     },
