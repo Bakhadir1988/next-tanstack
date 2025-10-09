@@ -2,8 +2,6 @@ import { ListProductType } from '@/shared/types/list.product.type';
 
 import { API_BASE_URL } from '../config/site.config';
 
-import { getSessionId } from './session.api';
-
 export type ListResponse = {
   items: ListProductType[];
   total_cost?: number;
@@ -45,17 +43,26 @@ async function fetchFromListServer(
 
 const createListApi = (list: ListType) => {
   return {
-    get: (sessionId: string): Promise<ListResponse | string> => {
+    get: async (sessionId: string): Promise<ListResponse> => {
       const form = new FormData();
+      if (sessionId) form.append('session_id', sessionId);
       form.append('comp', 'list_server');
       form.append('list', list);
-      form.append('session_id', sessionId);
-      return fetchFromListServer(form);
+      const result = await fetchFromListServer(form);
+      if (typeof result === 'string') {
+        console.warn(
+          `API for list "${list}" returned a string for GET: ${result}. Returning empty list.`,
+        );
+        return { items: [] };
+      }
+      return result;
     },
 
-    add: (item: { item_id: string }): Promise<ListResponse | string> => {
+    add: (
+      item: { item_id: string },
+      sessionId: string,
+    ): Promise<ListResponse | string> => {
       const form = new FormData();
-      const sessionId = getSessionId();
       if (sessionId) {
         form.append('session_id', sessionId);
       }
@@ -68,9 +75,11 @@ const createListApi = (list: ListType) => {
       return fetchFromListServer(form);
     },
 
-    remove: (item: { item_id: string }): Promise<ListResponse | string> => {
+    remove: (
+      item: { item_id: string },
+      sessionId: string,
+    ): Promise<ListResponse | string> => {
       const form = new FormData();
-      const sessionId = getSessionId();
       if (sessionId) {
         form.append('session_id', sessionId);
       }

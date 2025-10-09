@@ -4,14 +4,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
 import { favoritesApi, ListResponse } from '@/shared/api/list.api';
-import { getSessionId } from '@/shared/api/session.api';
+import { useSession } from '@/shared/lib/session.context';
 import { ListProductType } from '@/shared/types/list.product.type';
 
 type UseProductListMutationProps = {
   product: ProductType;
-  isInList: boolean; // Теперь обязательный проп
-  queryKey: 'favorites' | 'compare' | 'cart';
-  api: typeof favoritesApi; // Позволяет передавать нужный API
+  isInList: boolean;
+  queryKey: string;
+  api: typeof favoritesApi;
 };
 
 export const useProductListMutation = ({
@@ -21,12 +21,12 @@ export const useProductListMutation = ({
   api,
 }: UseProductListMutationProps) => {
   const queryClient = useQueryClient();
-  const sessionId = getSessionId();
+  const sessionId = useSession();
 
   const mutation = useMutation({
     mutationFn: () => {
       const apiAction = isInList ? api.remove : api.add;
-      return apiAction({ item_id: product.item_id });
+      return apiAction({ item_id: product.item_id }, sessionId);
     },
 
     onMutate: async () => {

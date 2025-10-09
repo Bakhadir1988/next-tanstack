@@ -1,43 +1,50 @@
 'use client';
 
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { useQuery } from '@tanstack/react-query';
 
+import { ProductType } from '@/entities/product/model/product.type';
 import { ProductCard } from '@/entities/product/ui/product-card';
-import { useProductListQuery } from '@/features/product/hooks/use-product-list-query';
-import { ListProductType } from '@/shared/types/list.product.type';
+import { compareApi, ListResponse } from '@/shared/api/list.api';
+import { useSession } from '@/shared/lib/session.context';
 import { Grid, Heading } from '@/shared/ui';
 import { EmptyState } from '@/shared/ui/empty-state';
 
-type CompareViewProps = {
-  initialItems: ListProductType[];
-  sessionId: string | undefined;
-};
+export const CompareView = () => {
+  const sessionId = useSession();
 
-export const CompareView = ({ initialItems, sessionId }: CompareViewProps) => {
-  const { items } = useProductListQuery({
-    initialItems,
-    sessionId,
-    queryKey: 'compare',
+  const { data } = useQuery<ListResponse>({
+    queryKey: ['compare', sessionId],
+    queryFn: () => compareApi.get(sessionId),
+    enabled: !!sessionId,
   });
+
+  const items: ProductType[] = (data?.items ?? []).map((item) => ({
+    ...item.data,
+    url: item.url,
+  }));
+
+  if (!items.length) {
+    return (
+      <EmptyState
+        icon={<MixerHorizontalIcon width={50} height={50} />}
+        title="Нет товаров для сравнения"
+        description="Добавьте товары в сравнения, чтобы отслеживать их цену и наличие."
+      />
+    );
+  }
 
   return (
     <>
       <Heading as="h1" size="1">
         Сравнение
       </Heading>
-      {!items.length ? (
-        <EmptyState
-          icon={<MixerHorizontalIcon width={50} height={50} />}
-          title="Нет товаров для сравнения"
-          description="Добавьте товары в сравнения, чтобы отслеживать их цену и наличие."
-        />
-      ) : (
-        <Grid columns="repeat(4, 1fr)" gap="md">
-          {items.map((product) => (
-            <ProductCard key={product.item_id} product={product} />
-          ))}
-        </Grid>
-      )}
+
+      <Grid columns="repeat(4, 1fr)" gap="md">
+        {items.map((product) => (
+          <ProductCard key={product.item_id} product={product} />
+        ))}
+      </Grid>
     </>
   );
 };

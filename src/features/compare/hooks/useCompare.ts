@@ -4,42 +4,15 @@ import { useQuery } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
 import { compareApi, ListResponse } from '@/shared/api/list.api';
-import { getSessionId } from '@/shared/api/session.api';
-import { ListProductType } from '@/shared/types/list.product.type';
+import { useSession } from '@/shared/lib/session.context';
 
-type UseCompareQueryProps = {
-  initialItems?: ListProductType[];
-  sessionId?: string;
-};
-
-export const useCompareQuery = ({
-  initialItems,
-  sessionId: sessionIdFromProps,
-}: UseCompareQueryProps = {}) => {
-  const localSessionId = getSessionId();
-  const sessionId = sessionIdFromProps ?? localSessionId;
+export const useCompareQuery = () => {
+  const sessionId = useSession();
 
   const { data, isLoading, isError, error } = useQuery<ListResponse>({
     queryKey: ['compare', sessionId],
-
-    queryFn: async (): Promise<ListResponse> => {
-      if (!sessionId) {
-        return { items: [], total_cost: 0, total_quantity: 0 };
-      }
-
-      const result = await compareApi.get(sessionId);
-
-      if (typeof result === 'string') {
-        console.error('Compare API returned a string:', result);
-        return { items: [], total_cost: 0, total_quantity: 0 };
-      }
-
-      return result;
-    },
+    queryFn: () => compareApi.get(sessionId),
     enabled: !!sessionId,
-    initialData: initialItems
-      ? { items: initialItems, total_cost: 0, total_quantity: 0 }
-      : undefined,
   });
 
   const items: ProductType[] = (data?.items ?? []).map((item) => ({
