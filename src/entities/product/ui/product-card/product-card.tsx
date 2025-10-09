@@ -70,7 +70,7 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
           <StockStatus in_stock={in_stock} />
         </Flex>
         <ProductCharacteristics product={product} map={map} />
-        <ProductPurchase />
+        <ProductPurchase product={product} />
       </Flex>
     </MotionFlex>
   );

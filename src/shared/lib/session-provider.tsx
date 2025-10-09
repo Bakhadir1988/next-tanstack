@@ -1,13 +1,20 @@
 'use client';
 
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 
-import { getSessionId } from '@/shared/api/session.api';
+import SessionContext from './session.context';
 
-export const SessionProvider = ({ children }: PropsWithChildren) => {
-  useEffect(() => {
-    getSessionId();
-  }, []);
+type SessionProviderProps = PropsWithChildren<{
+  sessionId: string;
+}>;
 
-  return <>{children}</>;
+export const SessionProvider = ({
+  children,
+  sessionId,
+}: SessionProviderProps) => {
+  return (
+    <SessionContext.Provider value={sessionId}>
+      {children}
+    </SessionContext.Provider>
+  );
 };

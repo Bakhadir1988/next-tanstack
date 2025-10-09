@@ -1,49 +1,66 @@
-import React, { useState } from 'react';
-
 import Link from 'next/link';
 
+import { useProductListContext } from '@/entities/product/model/product-list-context';
+import { ProductType } from '@/entities/product/model/product.type';
+import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
+import { cartApi } from '@/shared/api/list.api';
 import { Button, Flex, QuantityCounter } from '@/shared/ui';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './../product-card.module.scss';
 
-export const ProductPurchase = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
+type ProductPurchaseProps = {
+  product: ProductType;
+};
 
-  const handleQuantityChange = (newQuantity: number) => {
-    setQuantity(newQuantity);
-  };
+export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
+  const { addToast } = useToast();
+  const { cartIds } = useProductListContext();
 
-  const handleAddToCart = () => {
-    setIsAddedToCart(true);
-  };
+  const isCart = cartIds.has(product.item_id);
+
+  const { toggle: toggleCart } = useProductListMutation({
+    queryKey: 'cart',
+    api: cartApi,
+    onSuccessAction: (isAdded) => {
+      addToast({
+        image: product.imgs,
+        description: product.title,
+        href: isAdded ? '/cart/' : undefined,
+        title: isAdded ? 'Добавлено в корзину' : 'Удалено из корзины',
+      });
+    },
+  });
 
   return (
     <Flex direction="column" gap="sm" className={styles.purchase}>
       <Flex gap="sm" className={styles.purchase_wrapper}>
-        {isAddedToCart ? (
-          <Button variant="primary" asChild className={styles.add_button}>
-            <Link href="/cart">В корзине {quantity} шт.</Link>
+        {isCart ? (
+          <Button
+            variant="primary"
+            size="sm"
+            asChild
+            className={styles.add_button}
+          >
+            <Link href="/cart">В корзине {1} шт.</Link>
           </Button>
         ) : (
           <>
             <div className={styles.quantity_control}>
-              <QuantityCounter
-                value={quantity}
-                onChange={handleQuantityChange}
-              />
+              <QuantityCounter value={1} onChange={() => {}} />
             </div>
             <Button
               variant="primary"
+              size="sm"
               className={styles.add_button}
-              onClick={handleAddToCart}
+              onClick={() => toggleCart({ product })}
             >
               В корзину
             </Button>
           </>
         )}
       </Flex>
-      <Button variant="outline" className={styles.buy_button}>
+      <Button variant="outline" size="sm" className={styles.buy_button}>
         Купить в один клик
       </Button>
     </Flex>

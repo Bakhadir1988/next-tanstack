@@ -1,94 +1,122 @@
 'use client';
 
+import { useRef } from 'react';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { ProductType } from '@/entities/product/model/product.type';
 import { favoritesApi, ListResponse } from '@/shared/api/list.api';
-import { getSessionId } from '@/shared/api/session.api';
-import { ListProductType } from '@/shared/types/list.product.type';
+import { useSession } from '@/shared/lib/session.context';
 
 type UseProductListMutationProps = {
+  queryKey: string;
+  api: typeof favoritesApi;
+  onSuccessAction?: (isAdded: boolean) => void;
+};
+
+type MutationVariables = {
   product: ProductType;
-  isInList: boolean; // Теперь обязательный проп
-  queryKey: 'favorites' | 'compare';
-  api: typeof favoritesApi; // Позволяет передавать нужный API
 };
 
 export const useProductListMutation = ({
-  product,
-  isInList,
   queryKey,
   api,
+  onSuccessAction,
 }: UseProductListMutationProps) => {
   const queryClient = useQueryClient();
-  const sessionId = getSessionId();
+  const sessionId = useSession();
+  const wasInListRef = useRef<boolean>(false);
 
-  const mutation = useMutation({
-    mutationFn: () => {
-      const apiAction = isInList ? api.remove : api.add;
-      return apiAction({ item_id: product.item_id });
-    },
-
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: [queryKey, sessionId] });
-
+  const mutation = useMutation<
+    boolean,
+    Error,
+    MutationVariables,
+    { previousData?: ListResponse }
+  >({
+    onMutate: async ({ product }) => {
+      // СНАЧАЛА сохраняем оригинальное состояние
       const previousData = queryClient.getQueryData<ListResponse>([
         queryKey,
         sessionId,
       ]);
 
-      queryClient.setQueryData<ListResponse>(
-        [queryKey, sessionId],
-        (oldData) => {
-          const newItem: ListProductType = {
-            id: `temp-${product.item_id}`,
+      // Определяем, был ли товар в списке ДО любых изменений
+      wasInListRef.current = previousData
+        ? previousData.items.some((item) => item.item_id === product.item_id)
+        : false;
+
+      // Отменяем текущие запросы для избежания конфликтов
+      await queryClient.cancelQueries({ queryKey: [queryKey, sessionId] });
+
+      // Оптимистично обновляем UI
+      if (previousData) {
+        if (wasInListRef.current) {
+          // Удаляем из списка
+          const removedItem = previousData.items.find(
+            (item) => item.item_id === product.item_id,
+          );
+          const newItems = previousData.items.filter(
+            (item) => item.item_id !== product.item_id,
+          );
+          queryClient.setQueryData<ListResponse>([queryKey, sessionId], {
+            ...previousData,
+            items: newItems,
+            total_cost:
+              (previousData.total_cost || 0) -
+              (removedItem?.total || parseFloat(product.price || '0')),
+          });
+        } else {
+          // Добавляем в список - создаем ListProductType из ProductType
+          const newListItem = {
+            id: product.item_id,
             item_id: product.item_id,
             price: product.price || '0',
             title: product.title,
             url: product.url,
-            rec_type: queryKey === 'favorites' ? 'fav' : 'compare',
-            ts: String(Date.now() / 1000),
+            rec_type: 'product',
+            ts: new Date().toISOString(),
             quantity: '1',
-            total: Number(product.price || '0'),
+            total: parseFloat(product.price || '0'),
             data: product,
           };
+          const newItems = [...previousData.items, newListItem];
+          queryClient.setQueryData<ListResponse>([queryKey, sessionId], {
+            ...previousData,
+            items: newItems,
+            total_cost:
+              (previousData.total_cost || 0) + parseFloat(product.price || '0'),
+          });
+        }
+      }
 
-          if (!oldData) {
-            return { items: [newItem], total_cost: 0, total_quantity: 0 };
-          }
-
-          if (isInList) {
-            return {
-              ...oldData,
-              items: oldData.items.filter(
-                (item) => item.item_id !== product.item_id,
-              ),
-            };
-          } else {
-            return {
-              ...oldData,
-              items: [...oldData.items, newItem],
-            };
-          }
-        },
-      );
-
+      // Возвращаем контекст для rollback
       return { previousData };
     },
 
-    onError: (err, variables, context) => {
+    mutationFn: async ({ product }) => {
+      // Используем сохраненное значение из ref
+      const wasInList = wasInListRef.current;
+
+      const apiAction = wasInList ? api.remove : api.add;
+      await apiAction({ item_id: product.item_id }, sessionId);
+      return !wasInList;
+    },
+
+    onError: (_err, _variables, context) => {
+      // Откатываем изменения при ошибке
       if (context?.previousData) {
         queryClient.setQueryData([queryKey, sessionId], context.previousData);
       }
     },
 
-    onSettled: () => {
+    onSuccess: (isAdded) => {
       queryClient.invalidateQueries({ queryKey: [queryKey, sessionId] });
+      onSuccessAction?.(isAdded);
     },
   });
 
   return {
-    toggle: mutation.mutate,
+    toggle: (vars: MutationVariables) => mutation.mutate(vars),
     isLoading: mutation.isPending,
   };
 };

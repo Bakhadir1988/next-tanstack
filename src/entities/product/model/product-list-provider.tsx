@@ -2,9 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { useCompareQuery } from '@/features/compare/hooks/useCompare';
-import { useFavoritesQuery } from '@/features/favorite/hooks/useFavorites';
-import { getSessionId } from '@/shared/api/session.api';
+import { useProductListQuery } from '@/features/product/hooks/use-product-list-query';
 
 import { ProductListContext } from './product-list-context';
 
@@ -13,11 +11,16 @@ export const ProductListProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const sessionId = getSessionId();
-
   // Получаем данные для избранного и сравнения один раз здесь
-  const { items: favoriteProducts } = useFavoritesQuery({ sessionId });
-  const { items: compareProducts } = useCompareQuery({ sessionId });
+  const { items: favoriteProducts } = useProductListQuery({
+    queryKey: 'favorites',
+  });
+  const { items: compareProducts } = useProductListQuery({
+    queryKey: 'compare',
+  });
+  const { items: cartProducts } = useProductListQuery({
+    queryKey: 'cart',
+  });
 
   // Создаем Set'ы с ID для быстрой проверки
   const favoriteIds = useMemo(
@@ -28,9 +31,13 @@ export const ProductListProvider = ({
     () => new Set(compareProducts.map((p) => p.item_id)),
     [compareProducts],
   );
+  const cartIds = useMemo(
+    () => new Set(cartProducts.map((p) => p.item_id)),
+    [cartProducts],
+  );
 
   return (
-    <ProductListContext.Provider value={{ favoriteIds, compareIds }}>
+    <ProductListContext.Provider value={{ favoriteIds, compareIds, cartIds }}>
       {children}
     </ProductListContext.Provider>
   );

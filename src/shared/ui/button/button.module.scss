@@ -110,7 +110,7 @@
 // Sizes
 .size_sm {
   height: var(--button-height-sm);
-  font-size: var(--font-size-p);
+  font-size: rem(15);
   &.variant_icon {
     width: var(--button-height-sm);
   }
@@ -118,7 +118,7 @@
 
 .size_md {
   height: var(--button-height-md);
-  font-size: var(--font-size-p);
+  font-size: rem(16);
   &.variant_icon {
     width: var(--button-height-md);
   }

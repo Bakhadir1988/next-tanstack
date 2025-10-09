@@ -8,6 +8,7 @@ import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { compareApi, favoritesApi } from '@/shared/api/list.api';
 import { Button, Flex } from '@/shared/ui';
+import { useToast } from '@/shared/ui/toast';
 
 import styles from './../product-card.module.scss';
 
@@ -17,6 +18,7 @@ type ProductActionsProps = {
 };
 
 export const ProductActions = ({ product }: ProductActionsProps) => {
+  const { addToast } = useToast();
   // 1. Получаем ID из контекста
   const { favoriteIds, compareIds } = useProductListContext();
 
@@ -24,23 +26,34 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
   const isFavorite = favoriteIds.has(product.item_id);
   const isCompare = compareIds.has(product.item_id);
 
-
   // 3. Используем универсальный хук для ИЗБРАННОГО
   const { toggle: toggleFavorite, isLoading: isFavoriteLoading } =
     useProductListMutation({
-      product: product,
-      isInList: isFavorite,
       queryKey: 'favorites',
       api: favoritesApi,
+      onSuccessAction: (isAdded) => {
+        addToast({
+          image: product.imgs,
+          description: product.title,
+          href: isAdded ? `/favorites/` : undefined,
+          title: isAdded ? 'Добавлено в избранное' : 'Удалено из избранного',
+        });
+      },
     });
 
   // 4. Используем универсальный хук для СРАВНЕНИЯ
   const { toggle: toggleCompare, isLoading: isCompareLoading } =
     useProductListMutation({
-      product: product,
-      isInList: isCompare,
       queryKey: 'compare',
       api: compareApi,
+      onSuccessAction: (isAdded) => {
+        addToast({
+          image: product.imgs,
+          description: product.title,
+          href: isAdded ? `/compare/` : undefined,
+          title: isAdded ? 'Добавлено в сравнение' : 'Удалено из сравнения',
+        });
+      },
     });
 
   return (
@@ -48,7 +61,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
       <Button
         variant="icon"
         icon={<HeartIcon />}
-        onClick={() => toggleFavorite()}
+        onClick={() => toggleFavorite({ product })}
         className={clsx(
           styles.action_button,
           isFavorite && styles.action_button_active,
@@ -62,7 +75,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
       <Button
         variant="icon"
         icon={<LayersIcon />}
-        onClick={() => toggleCompare()}
+        onClick={() => toggleCompare({ product })}
         className={clsx(
           styles.action_button,
           isCompare && styles.action_button_active,

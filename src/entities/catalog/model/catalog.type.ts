@@ -7,6 +7,7 @@ export type CatalogSection = {
   item_id: string;
   title: string;
   url: string;
+  imgs: string[];
 };
 
 export type CatalogApiResponse = {
