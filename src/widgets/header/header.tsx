@@ -5,6 +5,7 @@ import {
   MixerHorizontalIcon,
   BackpackIcon,
 } from '@radix-ui/react-icons';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -17,10 +18,7 @@ import { ProductListDropdown } from '@/widgets/product-list-dropdown';
 
 import styles from './header.module.scss';
 
-const navLinks = [
-  { href: '/', label: 'Главная' },
-  { href: '/catalog', label: 'Каталог' },
-];
+const navLinks = [{ href: '/catalog', label: 'Каталог' }];
 
 export const Header = () => {
   const router = useRouter();
@@ -60,7 +58,7 @@ export const Header = () => {
         <Flex justify="between">
           <div className={styles.left_section}>
             <Link href="/" className={styles.logo}>
-              <span>Лого</span>
+              <Image src="/logo.svg" alt="Logo" width={200} height={200} />
             </Link>
             <nav className={styles.nav}>
               {navLinks.map((link) => (

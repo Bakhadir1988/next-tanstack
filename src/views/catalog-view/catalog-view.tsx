@@ -30,7 +30,7 @@ export const CatalogView = () => {
       <Heading as="h1" size="1">
         {section?.title}
       </Heading>
-      <CatalogSections sections={sections} />
+      <CatalogSections sections={sections || []} />
       <ProductListToolbar view={view} onViewChangeAction={setView} />
       <ProductList items={items || []} map={map || []} view={view} />
     </div>
