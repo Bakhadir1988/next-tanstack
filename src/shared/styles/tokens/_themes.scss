@@ -1,7 +1,8 @@
-// Светлая тема (по умолчанию)
+/* Светлая тема (по умолчанию) */
 :root {
   // Цвета
   --color-primary: #5b7fff;
+
   --color-secondary: #6c757d;
   --color-green: #32cb5d;
   --color-success: var(--color-green);
@@ -11,6 +12,7 @@
 
   // Фон
   --color-background: #ffffff;
+  --color-background-card: #ffffff;
   --color-background-secondary: #f4f4f4;
   --color-surface: #ffffff;
   --color-surface-hover: #e9ecef;
@@ -33,4 +35,36 @@
   --transition-fast: 0.15s ease-in-out;
   --transition-normal: 0.3s ease-in-out;
   --transition-slow: 0.5s ease-in-out;
+}
+
+/* 🌙 Тёмная тема */
+.dark {
+  // Цвета можно оставить те же, если не хочешь менять брендовые
+  --color-primary: #5b7fff;
+  --color-secondary: #6c757d;
+  --color-green: #32cb5d;
+  --color-warning: #ffc107;
+  --color-danger: #ff6565;
+  --color-purple: #a56ffd;
+
+  // Фон
+  --color-background: #1b1b1b;
+  --color-background-card: #232323;
+  --color-background-secondary: #343434;
+  --color-surface: #121212;
+  --color-surface-hover: #2a2a2a;
+
+  // Текст
+  --color-text: #f1f1f1;
+  --color-text-secondary: #bbbbbb;
+  --color-text-white: #ffffff;
+
+  // Границы
+  --color-border: #3a3a3a;
+  --color-border-focus: var(--color-primary);
+
+  // Тени (делаем мягче, чтобы не контрастило сильно)
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 5px 30px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.7);
 }

@@ -1,6 +1,7 @@
 import { dehydrate } from '@tanstack/react-query';
 import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
+import { ThemeProvider } from 'next-themes';
 
 import { cartApi, compareApi, favoritesApi } from '@/shared/api/list.api';
 import getQueryClient from '@/shared/lib/get-query-client';
@@ -68,15 +69,17 @@ export default async function RootLayout({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <html lang="en" className={roboto.variable}>
+    <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <body className={roboto.className}>
-        <Providers
-          sessionId={sessionId ?? ''}
-          dehydratedState={dehydratedState}
-        >
-          <Header />
-          <main className="container">{children}</main>
-        </Providers>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Providers
+            sessionId={sessionId ?? ''}
+            dehydratedState={dehydratedState}
+          >
+            <Header />
+            <main>{children}</main>
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

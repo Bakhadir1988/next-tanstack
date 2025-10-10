@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Link from 'next/link';
 
 import { useProductListContext } from '@/entities/product/model/product-list-context';
@@ -16,6 +18,7 @@ type ProductPurchaseProps = {
 export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
   const { addToast } = useToast();
   const { cartIds } = useProductListContext();
+  const [quantity, setQuantity] = useState(1);
 
   const isCart = cartIds.has(product.item_id);
 
@@ -42,18 +45,18 @@ export const ProductPurchase = ({ product }: ProductPurchaseProps) => {
             asChild
             className={styles.add_button}
           >
-            <Link href="/cart">В корзине {1} шт.</Link>
+            <Link href="/cart">В корзине {quantity} шт.</Link>
           </Button>
         ) : (
           <>
             <div className={styles.quantity_control}>
-              <QuantityCounter value={1} onChange={() => {}} />
+              <QuantityCounter value={quantity} onChange={setQuantity} />
             </div>
             <Button
               variant="primary"
               size="sm"
               className={styles.add_button}
-              onClick={() => toggleCart({ product })}
+              onClick={() => toggleCart({ product, quantity })}
             >
               В корзину
             </Button>

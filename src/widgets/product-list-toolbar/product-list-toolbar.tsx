@@ -21,10 +21,12 @@ export const ProductListToolbar = ({
   onViewChangeAction,
 }: ProductListToolbarProps) => {
   return (
-    <Flex justify="between" align="center" className={styles.root}>
-      {/* В будущем здесь будет компонент сортировки и кнопка "Фильтр" */}
-      <span>Сортировка и Фильтр</span>
-      <SegmentControl value={view} onValueChangeAction={onViewChangeAction} />
-    </Flex>
+    <div className={styles.root}>
+      <Flex justify="between" align="center">
+        {/* В будущем здесь будет компонент сортировки и кнопка "Фильтр" */}
+        <span>Сортировка и Фильтр</span>
+        <SegmentControl value={view} onValueChangeAction={onViewChangeAction} />
+      </Flex>
+    </div>
   );
 };

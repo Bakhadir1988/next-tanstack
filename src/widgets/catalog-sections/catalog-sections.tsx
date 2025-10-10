@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { CatalogSection } from '@/entities/catalog/model/catalog.type';
 import { SectionItem } from '@/entities/catalog/ui/section-item/section-item';
 import { Grid } from '@/shared/ui';
@@ -14,10 +16,14 @@ export const CatalogSections = ({ sections }: CatalogSectionProps) => {
   }
 
   return (
-    <Grid gap="sm" className={styles.root}>
-      {sections.map((section) => (
-        <SectionItem key={section.item_id} section={section} />
-      ))}
-    </Grid>
+    <section className={styles.root}>
+      <div className={clsx(styles.container, 'container')}>
+        <Grid gap="sm" className={styles.grid}>
+          {sections.map((section) => (
+            <SectionItem key={section.item_id} section={section} />
+          ))}
+        </Grid>
+      </div>
+    </section>
   );
 };

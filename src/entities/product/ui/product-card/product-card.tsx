@@ -1,4 +1,3 @@
-import { motion, useAnimation } from 'framer-motion';
 import Link from 'next/link';
 
 import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
@@ -23,9 +22,6 @@ type ProductCardProps = {
 };
 
 export const ProductCard = ({ product, map }: ProductCardProps) => {
-  const controls = useAnimation();
-  const MotionFlex = motion(Flex);
-
   const { title, imgs, url, price, in_stock, rating, discount } = product;
 
   const discountPrice = Number(price) * (Number(discount) / 100);
@@ -37,15 +33,7 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
   const truncatedTitle = truncateText(title, 50);
 
   return (
-    <MotionFlex
-      direction="column"
-      gap="sm"
-      className={styles.root}
-      onMouseEnter={() => controls.start('hover')}
-      onMouseLeave={() => controls.start('initial')}
-      animate={controls}
-      initial="initial"
-    >
+    <Flex direction="column" gap="sm" className={styles.root}>
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} />
         <ProductImageSlider imgs={imgs} alt={title} />
@@ -72,6 +60,6 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
         <ProductCharacteristics product={product} map={map} />
         <ProductPurchase product={product} />
       </Flex>
-    </MotionFlex>
+    </Flex>
   );
 };

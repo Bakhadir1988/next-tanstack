@@ -36,8 +36,27 @@ export const ProductListProvider = ({
     [cartProducts],
   );
 
+  const value = useMemo(
+    () => ({
+      favoriteIds,
+      compareIds,
+      cartIds,
+      favorites: favoriteProducts,
+      compare: compareProducts,
+      cart: cartProducts,
+    }),
+    [
+      favoriteIds,
+      compareIds,
+      cartIds,
+      favoriteProducts,
+      compareProducts,
+      cartProducts,
+    ],
+  );
+
   return (
-    <ProductListContext.Provider value={{ favoriteIds, compareIds, cartIds }}>
+    <ProductListContext.Provider value={value}>
       {children}
     </ProductListContext.Provider>
   );

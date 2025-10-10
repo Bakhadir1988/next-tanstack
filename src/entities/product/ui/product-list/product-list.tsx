@@ -7,6 +7,7 @@ import { Grid } from '@/shared/ui';
 
 import { ProductType } from '../../model/product.type';
 import { ProductCard } from '../product-card';
+import { ProductRow } from '../product-row/product-row';
 
 import styles from './product-list.module.css';
 
@@ -44,7 +45,7 @@ export const ProductList = ({
       >
         {items.map((item) => {
           if (view === 'list') {
-            return 'Вид списков';
+            return <ProductRow key={item.item_id} />;
           }
 
           if (view === 'table') {

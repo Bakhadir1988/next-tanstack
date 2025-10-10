@@ -1,4 +1,23 @@
 .root {
-  grid-template-columns: repeat(6, 1fr);
   margin-bottom: var(--spacing-lg);
+}
+
+.container {
+  container: sections / inline-size;
+}
+
+.grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@container sections (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@container sections (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
 }

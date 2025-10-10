@@ -14,6 +14,7 @@ import { useProductListQuery } from '@/features/product/hooks/use-product-list-q
 import { favoritesApi, compareApi, cartApi } from '@/shared/api/list.api';
 import { Badge, Flex } from '@/shared/ui';
 import { Dropdown } from '@/shared/ui/dropdown';
+import { ThemeSwitcher } from '@/shared/ui/theme-switcher/theme-switcher';
 import { ProductListDropdown } from '@/widgets/product-list-dropdown';
 
 import styles from './header.module.scss';
@@ -55,6 +56,9 @@ export const Header = () => {
   return (
     <header className={styles.header}>
       <div className="container">
+        <Flex>
+          <ThemeSwitcher />
+        </Flex>
         <Flex justify="between">
           <div className={styles.left_section}>
             <Link href="/" className={styles.logo}>

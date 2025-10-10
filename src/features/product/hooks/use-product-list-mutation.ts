@@ -16,6 +16,7 @@ type UseProductListMutationProps = {
 
 type MutationVariables = {
   product: ProductType;
+  quantity?: number;
 };
 
 export const useProductListMutation = ({
