@@ -19,7 +19,7 @@ import {
 const options = [
   { value: 'block', label: 'Блоки', icon: <GridIcon />, title: 'Вид блоком' },
   {
-    value: 'list',
+    value: 'row',
     label: 'Список',
     icon: <DragHandleHorizontalIcon />,
     title: 'Вид списком',

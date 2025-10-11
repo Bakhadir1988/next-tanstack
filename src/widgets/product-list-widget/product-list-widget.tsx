@@ -34,6 +34,8 @@ export const ProductListWidget = ({
     return <div>Товары не найдены.</div>;
   }
 
+  console.log(view);
+
   return (
     <section className={styles.root}>
       <div className={clsx(styles.container, 'container')}>
@@ -47,7 +49,7 @@ export const ProductListWidget = ({
 
         <Grid
           gap="sm"
-          className={clsx({
+          className={clsx(styles.list, {
             [styles.block]: view === 'block',
             [styles.row]: view === 'row',
             [styles.table]: view === 'table',
@@ -60,7 +62,9 @@ export const ProductListWidget = ({
                   <ProductCard key={item.item_id} product={item} map={map} />
                 );
               case 'row':
-                return <ProductRow key={item.item_id} />;
+                return (
+                  <ProductRow key={item.item_id} product={item} map={map} />
+                );
               case 'table':
                 return <ProductTable key={item.item_id} />;
             }

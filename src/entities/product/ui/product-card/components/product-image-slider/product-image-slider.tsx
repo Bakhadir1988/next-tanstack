@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { clsx } from 'clsx';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { NEXT_PUBLIC_IMAGE_URL } from '@/shared/config/site.config';
 
@@ -10,9 +11,20 @@ import styles from './product-image-slider.module.scss';
 type ProductImageSliderProps = {
   imgs: string[];
   alt: string;
+  url: string;
+  width?: number;
+  height?: number;
+  className?: string;
 };
 
-export const ProductImageSlider = ({ imgs, alt }: ProductImageSliderProps) => {
+export const ProductImageSlider = ({
+  imgs,
+  alt,
+  url,
+  width = 300,
+  height = 300,
+  className,
+}: ProductImageSliderProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!imgs || imgs.length === 0) {
@@ -22,8 +34,8 @@ export const ProductImageSlider = ({ imgs, alt }: ProductImageSliderProps) => {
           className={styles.image}
           src="/image-placeholder.png"
           alt="Product image placeholder"
-          width={300}
-          height={300}
+          width={width}
+          height={height}
           priority
         />
       </div>
@@ -41,7 +53,7 @@ export const ProductImageSlider = ({ imgs, alt }: ProductImageSliderProps) => {
   const currentImageUrl = NEXT_PUBLIC_IMAGE_URL + imgs[currentIndex];
 
   return (
-    <div className={styles.root}>
+    <Link href={url} className={clsx(styles.root, className)}>
       {imgs.length > 1 && (
         <div className={styles.stripsContainer}>
           {imgs.map((_, index) => (
@@ -58,8 +70,8 @@ export const ProductImageSlider = ({ imgs, alt }: ProductImageSliderProps) => {
         className={clsx(styles.image, imgs.length > 1 && styles.with_dots)}
         src={currentImageUrl}
         alt={alt}
-        width={300}
-        height={300}
+        width={width}
+        height={width}
         priority
       />
 
@@ -76,6 +88,6 @@ export const ProductImageSlider = ({ imgs, alt }: ProductImageSliderProps) => {
           ))}
         </div>
       )}
-    </div>
+    </Link>
   );
 };

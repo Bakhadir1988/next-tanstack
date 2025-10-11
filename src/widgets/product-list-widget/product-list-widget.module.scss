@@ -2,7 +2,7 @@
   container: block / inline-size;
 }
 
-.block {
+.list {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 

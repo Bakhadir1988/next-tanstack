@@ -36,7 +36,7 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
     <Flex direction="column" gap="sm" className={styles.root}>
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} />
-        <ProductImageSlider imgs={imgs} alt={title} />
+        <ProductImageSlider url={url} imgs={imgs} alt={title} />
         <ProductActions product={product} />
       </Flex>
       <div className={styles.price}>
