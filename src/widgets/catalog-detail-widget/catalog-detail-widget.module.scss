@@ -1,0 +1,35 @@
+.root {
+  padding-block: var(--spacing-lg);
+}
+
+.container {
+  container: product / inline-size;
+}
+
+.main {
+  grid-template-columns: 1fr;
+
+  // > div {
+  //   outline: 1px solid red; // For debugging purposes
+  // }
+
+  @container product (min-width: 768px) {
+    grid-template-columns: 590px 1fr;
+  }
+}
+
+.info {
+  grid-template-columns: 1fr;
+
+  @container product (min-width: 650px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.heading {
+  grid-area: auto;
+
+  @container product (min-width: 650px) {
+    grid-area: 1 / span 2;
+  }
+}

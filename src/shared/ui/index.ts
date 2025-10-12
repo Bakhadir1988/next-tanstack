@@ -11,4 +11,6 @@ export { Textarea } from './textarea';
 export { QuantityCounter } from './quantity-counter';
 export { Dropdown } from './dropdown';
 export { EmptyState } from './empty-state';
+export { ProductSlider } from './product-slider';
+export { ImageLightbox } from './image-lightbox';
 export * from './toast';
