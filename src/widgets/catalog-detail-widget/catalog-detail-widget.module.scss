@@ -33,3 +33,14 @@
     grid-area: 1 / span 2;
   }
 }
+
+.rating {
+  font-size: rem(14);
+}
+
+.purchase {
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}

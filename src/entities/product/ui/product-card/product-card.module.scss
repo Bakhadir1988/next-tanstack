@@ -42,19 +42,6 @@
   gap: rem(3);
 }
 
-.action_button {
-  border: 1px solid var(--color-border);
-  background-color: var(--color-background-card);
-  &:hover:not(:disabled) {
-    color: var(--color-primary);
-  }
-
-  &_active {
-    color: var(--color-background);
-    border-color: var(--color-primary);
-  }
-}
-
 .badges {
   position: absolute;
   padding-right: 35%;

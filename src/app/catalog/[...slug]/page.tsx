@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import { catalogApi } from '@/shared/api/catalog.api';
 import { API_PATHS } from '@/shared/config/site.config';
 import { CatalogView } from '@/views';
-import { CatalogDetailWidget } from '@/widgets/catalog-detail-widget';
+import { CatalogDetailWidget } from '@/widgets';
 
 export async function generateStaticParams() {
   try {

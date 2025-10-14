@@ -24,9 +24,14 @@ import type { Swiper as SwiperType } from 'swiper';
 interface ProductSliderProps {
   images: string[];
   className?: string;
+  alt?: string;
 }
 
-export const ProductSlider = ({ images, className }: ProductSliderProps) => {
+export const ProductSlider = ({
+  images,
+  className,
+  alt,
+}: ProductSliderProps) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [isLightboxOpen, setLightboxOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -43,29 +48,31 @@ export const ProductSlider = ({ images, className }: ProductSliderProps) => {
         gap={'md'}
         className={clsx(styles.root, className)}
       >
-        <Swiper
-          onSwiper={setThumbsSwiper}
-          direction="vertical"
-          loop={true}
-          spaceBetween={10}
-          slidesPerView={7}
-          freeMode={true}
-          watchSlidesProgress={true}
-          modules={[FreeMode, Navigation, Thumbs]}
-          className={styles.thumbs_swiper}
-        >
-          {images.map((image, index) => (
-            <SwiperSlide key={index} className={styles.thumb_slide}>
-              <Image
-                src={NEXT_PUBLIC_IMAGE_URL + image}
-                alt={`Thumbnail ${index + 1}`}
-                width={64}
-                height={64}
-                className={styles.thumbImage}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+        {images.length > 1 && (
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            direction="vertical"
+            loop={true}
+            spaceBetween={10}
+            slidesPerView={7}
+            freeMode={true}
+            watchSlidesProgress={true}
+            modules={[FreeMode, Navigation, Thumbs]}
+            className={styles.thumbs_swiper}
+          >
+            {images.map((image, index) => (
+              <SwiperSlide key={index} className={styles.thumb_slide}>
+                <Image
+                  src={NEXT_PUBLIC_IMAGE_URL + image}
+                  alt={alt ? alt : `Thumbnail ${index + 1}`}
+                  width={64}
+                  height={64}
+                  className={styles.thumbImage}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
         <Swiper
           loop={true}
           spaceBetween={10}
@@ -85,7 +92,7 @@ export const ProductSlider = ({ images, className }: ProductSliderProps) => {
             >
               <Image
                 src={NEXT_PUBLIC_IMAGE_URL + image}
-                alt={`Slide ${index + 1}`}
+                alt={alt ? alt : `Slide ${index + 1}`}
                 width={500}
                 height={500}
                 className={styles.image}
@@ -99,6 +106,7 @@ export const ProductSlider = ({ images, className }: ProductSliderProps) => {
         onClose={() => setLightboxOpen(false)}
         images={images.map((img) => NEXT_PUBLIC_IMAGE_URL + img)}
         startIndex={selectedImageIndex}
+        alt={alt}
       />
     </>
   );

@@ -1,4 +1,3 @@
-// eslint.config.mjs
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,81 +15,19 @@ const compat = new FlatCompat({
 
 export default tseslint.config(
   {
-    ignores: ['.next/**', 'dist/**', 'build/**'],
+    ignores: ['.next/**'],
   },
   ...compat.extends('next/core-web-vitals'),
   ...tseslint.configs.recommended,
   {
     files: ['src/**/*.ts', 'src/**/*.tsx'],
-    languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: __dirname,
-      },
-    },
     plugins: {
       import: importPlugin,
     },
-    rules: {
-      // Сортировка импортов
-      'import/order': [
-        'error',
-        {
-          groups: [
-            'builtin', // встроенные модули Node.js
-            'external', // сторонние пакеты (react, lodash и т.д.)
-            'internal', // алиасы и внутренние пути (@/, shared/, features/ и т.д.)
-            'parent', // ../
-            'sibling', // ./same-dir
-            'index', // ./index
-            'object', // require(...)
-            'type', // type-only импорты
-          ],
-          'newlines-between': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-          pathGroups: [
-            {
-              pattern: 'react',
-              group: 'external',
-              position: 'before',
-            },
-            {
-              pattern: '@/**',
-              group: 'internal',
-            },
-            {
-              pattern: 'shared/**',
-              group: 'internal',
-            },
-            {
-              pattern: 'entities/**',
-              group: 'internal',
-            },
-            {
-              pattern: 'features/**',
-              group: 'internal',
-            },
-            {
-              pattern: 'widgets/**',
-              group: 'internal',
-            },
-            {
-              pattern: 'app/**',
-              group: 'internal',
-            },
-          ],
-          pathGroupsExcludedImportTypes: ['react'],
-        },
-      ],
-    },
+
     settings: {
       'import/resolver': {
-        typescript: {
-          project: './tsconfig.json',
-        },
+        typescript: true,
         node: true,
       },
     },

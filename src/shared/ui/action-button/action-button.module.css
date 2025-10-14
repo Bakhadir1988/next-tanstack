@@ -1,0 +1,14 @@
+.root {
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background-card);
+
+  &:hover:not(.active) {
+    background-color: var(--color-primary);
+  }
+}
+
+.active {
+  color: #fff;
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+}

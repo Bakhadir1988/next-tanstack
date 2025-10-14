@@ -1,13 +1,12 @@
 'use client';
 
 import { EyeOpenIcon, HeartIcon, LayersIcon } from '@radix-ui/react-icons';
-import clsx from 'clsx';
 
 import { useProductListContext } from '@/entities/product/model/product-list-context';
 import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { compareApi, favoritesApi } from '@/shared/api/list.api';
-import { Button, Flex } from '@/shared/ui';
+import { ActionButton, Button, Flex } from '@/shared/ui';
 import { useToast } from '@/shared/ui/toast';
 
 import styles from './../product-card.module.scss';
@@ -58,31 +57,22 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
 
   return (
     <Flex direction="column" className={styles.actions}>
-      <Button
-        variant="icon"
+      <ActionButton
         icon={<HeartIcon />}
         onClick={() => toggleFavorite({ product })}
-        className={clsx(
-          styles.action_button,
-          isFavorite && styles.action_button_active,
-        )}
-        title={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
         disabled={isFavoriteLoading}
-        aria-label={
-          isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'
-        }
+        isActive={isFavorite}
+        titleActive="Убрать из избранного"
+        titleInactive="Добавить в избранное"
       />
-      <Button
-        variant="icon"
+
+      <ActionButton
         icon={<LayersIcon />}
         onClick={() => toggleCompare({ product })}
-        className={clsx(
-          styles.action_button,
-          isCompare && styles.action_button_active,
-        )}
-        title={isCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}
         disabled={isCompareLoading}
-        aria-label={isCompare ? 'Убрать из сравнения' : 'Добавить в сравнение'}
+        isActive={isCompare}
+        titleActive="Убрать из сравнения"
+        titleInactive="Добавить в сравнения"
       />
       <Button
         variant="icon"

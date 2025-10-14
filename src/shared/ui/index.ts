@@ -13,4 +13,5 @@ export { Dropdown } from './dropdown';
 export { EmptyState } from './empty-state';
 export { ProductSlider } from './product-slider';
 export { ImageLightbox } from './image-lightbox';
+export { ActionButton } from './action-button';
 export * from './toast';
