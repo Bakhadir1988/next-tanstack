@@ -1,8 +1,7 @@
-import Link from 'next/link';
-
 import { Button, Flex } from '@/shared/ui';
-
+import Link from 'next/link';
 import styles from './cart-summary.module.scss';
+
 export const CartSummary = () => {
   return (
     <Flex direction="column" gap="sm" className={styles.root}>

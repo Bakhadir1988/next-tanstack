@@ -8,15 +8,16 @@ import { useProductListMutation } from '@/features/product/hooks/use-product-lis
 import { compareApi, favoritesApi } from '@/shared/api/list.api';
 import { ActionButton, Button, Flex } from '@/shared/ui';
 import { useToast } from '@/shared/ui/toast';
-
-import styles from './../product-card.module.scss';
+import clsx from 'clsx';
+import styles from './product-actions.module.scss';
 
 // --- Компонент ---
 type ProductActionsProps = {
   product: ProductType;
+  className?: string;
 };
 
-export const ProductActions = ({ product }: ProductActionsProps) => {
+export const ProductActions = ({ product, className }: ProductActionsProps) => {
   const { addToast } = useToast();
   // 1. Получаем ID из контекста
   const { favoriteIds, compareIds } = useProductListContext();
@@ -56,7 +57,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     });
 
   return (
-    <Flex direction="column" className={styles.actions}>
+    <Flex direction="column" className={clsx(styles.root, className)}>
       <ActionButton
         icon={<HeartIcon />}
         onClick={() => toggleFavorite({ product })}

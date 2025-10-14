@@ -19,6 +19,8 @@ export const CompareView = () => {
     enabled: !!sessionId,
   });
 
+  console.log('data', data);
+
   const items: ProductType[] = (data?.items ?? []).map((item) => ({
     ...item.data,
     url: item.url,

@@ -13,6 +13,7 @@ export const CatalogView = () => {
   const { data: catalogData, error } = useQuery({
     queryKey: ['catalog', pathname],
     queryFn: () => catalogApi.get(pathname),
+    staleTime: 300000, // 5 minutes
     enabled: !!pathname,
   });
 

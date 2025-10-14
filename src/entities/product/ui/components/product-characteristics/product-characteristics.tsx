@@ -1,19 +1,20 @@
-import React from 'react';
-
 import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
 import { ProductType } from '@/entities/product/model/product.type';
 import { transformProductProperties } from '@/shared/lib/transform-product-properties';
 
-import styles from '../product-card.module.scss';
+import clsx from 'clsx';
+import styles from './product-characteristics.module.scss';
 
 type ProductCharacteristicsProps = {
   product: ProductType;
   map?: CatalogMap;
+  className?: string;
 };
 
 export const ProductCharacteristics = ({
   product,
   map,
+  className,
 }: ProductCharacteristicsProps) => {
   const characteristics = transformProductProperties(product, map);
 
@@ -29,12 +30,12 @@ export const ProductCharacteristics = ({
   }
 
   return (
-    <ul className={styles.characteristics_list}>
+    <ul className={clsx(styles.root, className)}>
       {validCharacteristics.map((char) => (
-        <li key={char.title} className={styles.characteristics_item}>
-          <span className={styles.characteristics_title}>{char.title} </span>
-          <span className={styles.characteristics_value}>
-            {Array.isArray(char.value) ? char.value.join(', ') : char.value}{' '}
+        <li key={char.title} className={styles.item}>
+          <span className={styles.title}>{char.title} </span>
+          <span className={styles.value}>
+            {Array.isArray(char.value) ? char.value.join(', ') : char.value}
             {char.unit}
           </span>
         </li>

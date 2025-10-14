@@ -4,11 +4,8 @@ import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
 import { Flex, Rating, StockStatus } from '@/shared/ui';
 
 import { ProductType } from '../../model/product.type';
-import {
-  ProductCharacteristics,
-  ProductImageSlider,
-} from '../product-card/components';
 
+import { ProductCharacteristics } from '../components';
 import styles from './product-row.module.scss';
 
 type ProductRowProps = {
@@ -17,18 +14,10 @@ type ProductRowProps = {
 };
 
 export const ProductRow = ({ product, map }: ProductRowProps) => {
-  const { url, rating, in_stock, imgs, title } = product;
+  const { url, rating, in_stock } = product;
 
   return (
     <Flex gap="lg" className={styles.root}>
-      <ProductImageSlider
-        url={url}
-        width={215}
-        height={215}
-        imgs={imgs}
-        alt={title}
-        className={styles.image}
-      />
       <Flex direction="column" gap="sm" align="start" className={styles.info}>
         <Link href={url} className={styles.title}>
           {product.title}

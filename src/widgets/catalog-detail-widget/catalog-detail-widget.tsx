@@ -12,7 +12,6 @@ import { HeartIcon, LayersIcon } from '@radix-ui/react-icons';
 
 import {
   ActionButton,
-  Button,
   Flex,
   Grid,
   Heading,
@@ -22,6 +21,7 @@ import {
 } from '@/shared/ui';
 import { usePathname } from 'next/navigation';
 
+import { ProductPurchase } from '@/features/product/ui/product-purchase';
 import styles from './catalog-detail-widget.module.scss';
 
 export const CatalogDetailWidget = () => {
@@ -124,24 +124,9 @@ export const CatalogDetailWidget = () => {
                   </Flex>
                 </Flex>
               </Flex>
-
               <div>Характеристики</div>
 
-              <div className={styles.purchase}>
-                <Flex
-                  direction="column"
-                  gap="sm"
-                  className={styles.purchase_item}
-                >
-                  <div className={styles.price}>price</div>
-                  <Button full_width className={styles.add_to_cart}>
-                    add_to_cart
-                  </Button>
-                  <Button full_width className={styles.one_click}>
-                    one_click
-                  </Button>
-                </Flex>
-              </div>
+              <ProductPurchase product={product} />
             </Grid>
           </Grid>
         </Flex>

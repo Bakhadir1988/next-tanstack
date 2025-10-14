@@ -1,15 +1,17 @@
 import { ProductType } from '@/entities/product/model/product.type';
 import { Badge, Flex } from '@/shared/ui';
 
-import styles from '../product-card.module.scss';
+import clsx from 'clsx';
+import styles from './product-badges.module.scss';
 
 type ProductBadgesProps = {
   product: ProductType;
+  className?: string;
 };
 
-export const ProductBadges = ({ product }: ProductBadgesProps) => {
+export const ProductBadges = ({ product, className }: ProductBadgesProps) => {
   return (
-    <Flex wrap="wrap" className={styles.badges}>
+    <Flex wrap="wrap" className={clsx(styles.root, className)}>
       {product.novelty === '1' && (
         <Badge color="green" size="1" variant="solid">
           Новинка
