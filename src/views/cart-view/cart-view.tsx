@@ -11,8 +11,6 @@ import { useSession } from '@/shared/lib/session.context';
 import { Flex, Grid, Heading } from '@/shared/ui';
 import { EmptyState } from '@/shared/ui/empty-state';
 
-import styles from './cart-view.module.scss';
-
 export const CartView = () => {
   const sessionId = useSession();
 
@@ -27,7 +25,7 @@ export const CartView = () => {
     url: item.url,
   }));
 
-  console.log(items);
+  console.log('data', data);
 
   return (
     <>
@@ -39,12 +37,7 @@ export const CartView = () => {
           description="Добавьте товары в корзину, чтобы отслеживать их цену и наличие."
         />
       ) : (
-        <Grid
-          columns="1fr 350px"
-          gap="md"
-          align="start"
-          className={styles.root}
-        >
+        <Grid columns="1fr 350px" gap="md" align="start">
           <Flex direction="column">
             {items.map((product) => (
               <CartProductRow key={product.item_id} product={product} />

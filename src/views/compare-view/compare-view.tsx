@@ -1,52 +1,51 @@
-'use client';
+import { CompareGridWidget } from '@/widgets/compare-grid';
 
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
+import { Heading } from '@/shared/ui';
+import { Breadcrumbs } from '@/shared/ui/breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import styles from './compare-view.module.scss';
 
-import { ProductType } from '@/entities/product/model/product.type';
-import { ProductCard } from '@/entities/product/ui/product-card';
-import { compareApi, ListResponse } from '@/shared/api/list.api';
-import { useSession } from '@/shared/lib/session.context';
-import { Grid, Heading } from '@/shared/ui';
-import { EmptyState } from '@/shared/ui/empty-state';
-
+// This component will receive props with all comparison data.
+// For now, it's a static layout.
 export const CompareView = () => {
-  const sessionId = useSession();
-
-  const { data } = useQuery<ListResponse>({
-    queryKey: ['compare', sessionId],
-    queryFn: () => compareApi.get(sessionId),
-    enabled: !!sessionId,
-  });
-
-  console.log('data', data);
-
-  const items: ProductType[] = (data?.items ?? []).map((item) => ({
-    ...item.data,
-    url: item.url,
-  }));
-
-  if (!items.length) {
-    return (
-      <EmptyState
-        icon={<MixerHorizontalIcon width={50} height={50} />}
-        title="Нет товаров для сравнения"
-        description="Добавьте товары в сравнения, чтобы отслеживать их цену и наличие."
-      />
-    );
-  }
+  // Hardcoded data for layout purposes
+  const categories = [
+    { name: 'Макияж', count: 3 },
+    { name: 'Запчасти для автомобилей', count: 1 },
+    { name: 'Смарт-часы', count: 1 },
+    { name: 'Посуда', count: 1 },
+    { name: 'Женская обувь', count: 1 },
+  ];
 
   return (
-    <>
-      <Heading as="h1" size="1">
-        Сравнение
+    <div className="container">
+      <Breadcrumbs />
+      <Heading as="h1" size="2" className="page_title">
+        Сравнение товаров
       </Heading>
 
-      <Grid columns="repeat(4, 1fr)" gap="md">
-        {items.map((product) => (
-          <ProductCard key={product.item_id} product={product} />
-        ))}
-      </Grid>
-    </>
+      <Tabs defaultValue={categories[0].name}>
+        <TabsList>
+          {categories.map((cat) => (
+            <TabsTrigger key={cat.name} value={cat.name}>
+              {cat.name} <span className="count">{cat.count}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {/* The content for each tab would go here */}
+        {/* For this static layout, we show the same grid in the first tab */}
+        <TabsContent value={categories[0].name}>
+          <div className={styles.toolbar}>
+            <div className={styles.toggle_wrapper}>
+              <label htmlFor="diff-toggle">Только отличия</label>
+            </div>
+            <button className={styles.clear_button}>Очистить сравнение</button>
+          </div>
+          <CompareGridWidget />
+        </TabsContent>
+        {/* Other TabsContent would go here... */}
+      </Tabs>
+    </div>
   );
 };

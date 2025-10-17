@@ -7,8 +7,7 @@ import { notFound } from 'next/navigation';
 
 import { catalogApi } from '@/shared/api/catalog.api';
 import { API_PATHS } from '@/shared/config/site.config';
-import { CatalogView } from '@/views';
-import { CatalogDetailWidget } from '@/widgets';
+import { CatalogView, ProductDetailView } from '@/views';
 
 export async function generateStaticParams() {
   try {
@@ -63,7 +62,7 @@ export default async function CatalogPage(props: {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       {/* Предполагаем, что CatalogDetailWidget тоже использует useQuery с тем же queryKey */}
-      <CatalogDetailWidget />
+      <ProductDetailView />
     </HydrationBoundary>
   );
 }

@@ -1,0 +1,37 @@
+.root {
+  margin-bottom: var(--spacing-md);
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  font-size: rem(14);
+}
+
+.link {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
+
+.current_page {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+.separator {
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+}

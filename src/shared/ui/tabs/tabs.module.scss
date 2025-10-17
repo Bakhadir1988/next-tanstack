@@ -1,0 +1,45 @@
+.list {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trigger {
+  position: relative; // For the pseudo-element
+  cursor: pointer;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-text-muted);
+  background-color: transparent; // Ensure no background
+  border: none; // Remove all borders
+  transition: color var(--transition-fast);
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  // The underline pseudo-element
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform var(--transition-normal);
+  }
+
+  &[data-state='active'] {
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+
+    &::after {
+      transform: scaleX(1); // Animate the underline in
+    }
+  }
+}
+
+.content {
+  padding: var(--spacing-md) 0;
+}

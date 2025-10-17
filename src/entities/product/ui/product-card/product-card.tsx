@@ -1,9 +1,10 @@
 import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
-import { Flex, Rating, StockStatus } from '@/shared/ui';
+import { Button, Flex, Rating, StockStatus } from '@/shared/ui';
 
 import { ProductType } from '../../model/product.type';
 
 import { ProductActions, ProductPurchase } from '@/features/product/ui';
+import { EyeOpenIcon } from '@radix-ui/react-icons';
 import {
   ProductBadges,
   ProductCharacteristics,
@@ -24,7 +25,15 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
       <Flex align="center" justify="center" className={styles.top}>
         <ProductBadges product={product} className={styles.badges} />
         <ProductImageSlider product={product} width={300} height={300} />
-        <ProductActions product={product} className={styles.actions} />
+        <Flex direction="column" gap="sm" className={styles.actions}>
+          <ProductActions product={product} />
+          <Button
+            variant="icon"
+            icon={<EyeOpenIcon />}
+            className={styles.action_button}
+            aria-label="Просмотреть товар"
+          />
+        </Flex>
       </Flex>
       <ProductTitle product={product} className={styles.title} />
       <ProductPrice product={product} />

@@ -1,0 +1,26 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.toggle_wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: rem(14);
+}
+
+.clear_button {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: rem(14);
+
+  &:hover {
+    color: var(--color-danger);
+    text-decoration: underline;
+  }
+}

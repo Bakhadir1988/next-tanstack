@@ -1,23 +1,20 @@
 'use client';
 
-import { EyeOpenIcon, HeartIcon, LayersIcon } from '@radix-ui/react-icons';
+import { HeartIcon, LayersIcon } from '@radix-ui/react-icons';
 
 import { useProductListContext } from '@/entities/product/model/product-list-context';
 import { ProductType } from '@/entities/product/model/product.type';
 import { useProductListMutation } from '@/features/product/hooks/use-product-list-mutation';
 import { compareApi, favoritesApi } from '@/shared/api/list.api';
-import { ActionButton, Button, Flex } from '@/shared/ui';
+import { ActionButton } from '@/shared/ui';
 import { useToast } from '@/shared/ui/toast';
-import clsx from 'clsx';
-import styles from './product-actions.module.scss';
 
 // --- Компонент ---
 type ProductActionsProps = {
   product: ProductType;
-  className?: string;
 };
 
-export const ProductActions = ({ product, className }: ProductActionsProps) => {
+export const ProductActions = ({ product }: ProductActionsProps) => {
   const { addToast } = useToast();
   // 1. Получаем ID из контекста
   const { favoriteIds, compareIds } = useProductListContext();
@@ -57,7 +54,7 @@ export const ProductActions = ({ product, className }: ProductActionsProps) => {
     });
 
   return (
-    <Flex direction="column" className={clsx(styles.root, className)}>
+    <>
       <ActionButton
         icon={<HeartIcon />}
         onClick={() => toggleFavorite({ product })}
@@ -75,12 +72,6 @@ export const ProductActions = ({ product, className }: ProductActionsProps) => {
         titleActive="Убрать из сравнения"
         titleInactive="Добавить в сравнения"
       />
-      <Button
-        variant="icon"
-        icon={<EyeOpenIcon />}
-        className={styles.action_button}
-        aria-label="Просмотреть товар"
-      />
-    </Flex>
+    </>
   );
 };

@@ -1,3 +1,5 @@
+import { FaqType } from '@/shared/types/faq.type';
+
 export type ProductPath = {
   item_id: string;
   url: string;
@@ -18,7 +20,7 @@ export type ProductType = {
   chars: Record<string, string | string[]>;
   density?: ProductDensity[];
   sections_objects: {
-    faq: unknown[];
+    faq: Record<string, FaqType>;
     related: unknown[];
   };
   item_id: string;
