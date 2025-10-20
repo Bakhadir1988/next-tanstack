@@ -49,6 +49,9 @@ const createListApi = (list: ListType) => {
       form.append('comp', 'list_server');
       form.append('list', list);
       const result = await fetchFromListServer(form);
+
+      console.log('result', result);
+
       if (typeof result === 'string') {
         console.warn(
           `API for list "${list}" returned a string for GET: ${result}. Returning empty list.`,
@@ -62,6 +65,8 @@ const createListApi = (list: ListType) => {
       item: { item_id: string },
       sessionId: string,
     ): Promise<ListResponse | string> => {
+      console.log('item', item);
+
       const form = new FormData();
       if (sessionId) {
         form.append('session_id', sessionId);

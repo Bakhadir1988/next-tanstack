@@ -1,9 +1,16 @@
 import { dehydrate } from '@tanstack/react-query';
+import { ThemeProvider } from 'next-themes';
 import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
-import { ThemeProvider } from 'next-themes';
 
-import { cartApi, compareApi, favoritesApi } from '@/shared/api/list.api';
+import { ProductType } from '@/entities/product/model/product.type';
+import { catalogApi } from '@/shared/api/catalog.api';
+import {
+  cartApi,
+  compareApi,
+  favoritesApi,
+  ListResponse,
+} from '@/shared/api/list.api';
 import getQueryClient from '@/shared/lib/get-query-client';
 import { Header } from '@/widgets/header/header';
 
@@ -65,6 +72,32 @@ export default async function RootLayout({
         queryFn: () => cartApi.get(sessionId),
       }),
     ]);
+
+    const compareData = queryClient.getQueryData<ListResponse>([
+      'compare',
+      sessionId,
+    ]);
+
+    if (compareData && compareData.items) {
+      const products: ProductType[] = (compareData.items ?? []).map((item) => ({
+        ...item.data,
+        url: item.url,
+        sect_id: item.sect_id,
+      }));
+
+      const sectionIds = [
+        ...new Set(products.map((p) => p.sect_id).filter(Boolean)),
+      ] as string[];
+
+      await Promise.all(
+        sectionIds.map((id) =>
+          queryClient.prefetchQuery({
+            queryKey: ['section', id],
+            queryFn: () => catalogApi.getSection(id),
+          }),
+        ),
+      );
+    }
   }
   const dehydratedState = dehydrate(queryClient);
 

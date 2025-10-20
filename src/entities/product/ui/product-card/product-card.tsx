@@ -44,6 +44,9 @@ export const ProductCard = ({ product, map }: ProductCardProps) => {
         </Flex>
         <ProductCharacteristics product={product} map={map} />
         <ProductPurchase product={product} />
+        <Button variant="outline" size="sm" className={styles.buy_button}>
+          Купить в один клик
+        </Button>
       </Flex>
     </Flex>
   );

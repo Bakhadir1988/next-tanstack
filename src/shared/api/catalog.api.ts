@@ -48,10 +48,35 @@ const fetchCatalogPost = async (
   }
 };
 
+import { SectionApiResponse } from '@/entities/catalog/model/section.type';
+
+const fetchSectionById = async (
+  sect_id: string,
+): Promise<SectionApiResponse | null> => {
+  const sectionApiUrl = 'https://litra-adm.workup.spb.ru/api/';
+  try {
+    const res = await fetch(
+      `${sectionApiUrl}?comp=catsections&sect_id=${sect_id}`,
+    );
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        return null;
+      }
+      throw new Error(`Error fetching from section server: ${res.status}`);
+    }
+
+    return res.json();
+  } catch (error) {
+    throw new Error(`Error fetching section data: ${error}`);
+  }
+};
+
 const catalogApiList = () => {
   return {
     get: (slug: string) => fetchBySlug(slug),
     post: (form: FormData) => fetchCatalogPost(form),
+    getSection: (sect_id: string) => fetchSectionById(sect_id),
   };
 };
 

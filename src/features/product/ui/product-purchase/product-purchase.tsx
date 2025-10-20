@@ -42,7 +42,7 @@ export const ProductPurchase = ({
     <Flex
       direction="column"
       gap="sm"
-      className={clsx(styles.root, styles.item)}
+      className={clsx(styles.root, styles.item, className)}
     >
       <Flex gap="sm">
         {isCart ? (
@@ -72,9 +72,6 @@ export const ProductPurchase = ({
           </>
         )}
       </Flex>
-      <Button variant="outline" size="sm" className={styles.buy_button}>
-        Купить в один клик
-      </Button>
     </Flex>
   );
 };

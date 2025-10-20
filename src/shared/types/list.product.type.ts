@@ -11,4 +11,5 @@ export type ListProductType = {
   quantity: string;
   total: number;
   data: ProductType;
+  sect_id?: string | null;
 };

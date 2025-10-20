@@ -1,42 +1,55 @@
-import Image from 'next/image';
+import { Button, Flex, Rating, StockStatus } from '@/shared/ui';
 
-import { Button } from '@/shared/ui';
-
-import { TrashIcon } from '@radix-ui/react-icons';
+import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
+import { ProductActions, ProductPurchase } from '@/features/product/ui';
+import { EyeOpenIcon } from '@radix-ui/react-icons';
+import { ProductType } from '../../model/product.type';
+import {
+  ProductBadges,
+  ProductCharacteristics,
+  ProductImageSlider,
+  ProductPrice,
+  ProductTitle,
+} from '../components';
 import styles from './compare-product-card.module.scss';
 
-// This component will receive props with product data in the future.
-// For now, it's a static layout.
-export const CompareProductCard = () => {
+type CompareProductCardProps = {
+  product: ProductType;
+  map?: CatalogMap;
+};
+
+export const CompareProductCard = ({
+  product,
+  map,
+}: CompareProductCardProps) => {
   return (
-    <div className={styles.root}>
-      <div className={styles.card_header}>
-        <Image
-          src="/image-placeholder.png" // Placeholder image
-          alt="Классическая помада"
-          width={150}
-          height={150}
-          className={styles.image}
-        />
-        <button className={styles.remove_button} aria-label="Удалить товар">
-          <TrashIcon />
-        </button>
-        <h3 className={styles.title}>
-          Классическая помада Fior 133 Беспечный розовый
-        </h3>
-        <span className={styles.sku}>Арт. F23786A5</span>
-        <div className={styles.price}>612 ₽</div>
-        <Button variant="primary" size="sm" className={styles.add_to_cart}>
-          В корзину
+    <Flex direction="column" gap="sm" className={styles.root}>
+      <Flex align="center" justify="center" className={styles.top}>
+        <ProductBadges product={product} className={styles.badges} />
+        <ProductImageSlider product={product} width={300} height={300} />
+        <Flex direction="column" gap="sm" className={styles.actions}>
+          <ProductActions product={product} />
+          <Button
+            variant="icon"
+            icon={<EyeOpenIcon />}
+            className={styles.action_button}
+            aria-label="Просмотреть товар"
+          />
+        </Flex>
+      </Flex>
+      <ProductTitle product={product} className={styles.title} />
+      <ProductPrice product={product} />
+      <Flex direction="column" gap="sm" className={styles.info}>
+        <Flex align="center" justify="between">
+          <Rating rating={product.rating} />
+          <StockStatus in_stock={product.in_stock} />
+        </Flex>
+        <ProductCharacteristics product={product} map={map} />
+        <ProductPurchase product={product} />
+        <Button variant="outline" size="sm" className={styles.buy_button}>
+          Купить в один клик
         </Button>
-      </div>
-      <div className={styles.chars}>
-        <div className={styles.char_item}>Держится до 10 часов</div>
-        <div className={styles.char_item}>Помада</div>
-        <div className={styles.char_item}>Франция</div>
-        <div className={styles.char_item}>Увлажняющий</div>
-        <div className={styles.char_item}>133 Беспечный розовый</div>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };

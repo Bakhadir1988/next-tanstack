@@ -1,21 +1,54 @@
+'use client';
+
 import { CompareGridWidget } from '@/widgets/compare-grid';
 
-import { Heading } from '@/shared/ui';
+import { ProductType } from '@/entities/product/model/product.type';
+import { useCompareSections } from '@/features/product/hooks/use-compare-sections';
+import { compareApi, ListResponse } from '@/shared/api/list.api';
+import { useSession } from '@/shared/lib/session.context';
+import { EmptyState, Heading } from '@/shared/ui';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { useQuery } from '@tanstack/react-query';
 import styles from './compare-view.module.scss';
 
-// This component will receive props with all comparison data.
-// For now, it's a static layout.
 export const CompareView = () => {
-  // Hardcoded data for layout purposes
-  const categories = [
-    { name: 'Макияж', count: 3 },
-    { name: 'Запчасти для автомобилей', count: 1 },
-    { name: 'Смарт-часы', count: 1 },
-    { name: 'Посуда', count: 1 },
-    { name: 'Женская обувь', count: 1 },
-  ];
+  const sessionId = useSession();
+
+  const { data: items } = useQuery<ListResponse>({
+    queryKey: ['compare', sessionId],
+    queryFn: () => compareApi.get(sessionId),
+    enabled: !!sessionId,
+  });
+
+  const initItems: ProductType[] = (items?.items ?? []).map((item) => ({
+    ...item.data,
+    url: item.url,
+    sect_id: item.sect_id,
+  }));
+
+  const { sections, isError } = useCompareSections(initItems);
+
+  if (!initItems.length) {
+    return (
+      <EmptyState
+        icon={<MixerHorizontalIcon width={50} height={50} />}
+        title="Нет товаров в сравнении"
+        description="Добавьте товары в сравнении, чтобы отслеживать их цену и наличие."
+      />
+    );
+  }
+
+  if (isError) {
+    return (
+      <EmptyState
+        icon={<MixerHorizontalIcon width={50} height={50} />}
+        title="Ошибка загрузки"
+        description="Не удалось загрузить информацию о категориях товаров. Попробуйте позже."
+      />
+    );
+  }
 
   return (
     <div className="container">
@@ -24,28 +57,31 @@ export const CompareView = () => {
         Сравнение товаров
       </Heading>
 
-      <Tabs defaultValue={categories[0].name}>
-        <TabsList>
-          {categories.map((cat) => (
-            <TabsTrigger key={cat.name} value={cat.name}>
-              {cat.name} <span className="count">{cat.count}</span>
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      {sections.length > 0 && (
+        <Tabs defaultValue={sections[0].id}>
+          <TabsList>
+            {sections.map((cat) => (
+              <TabsTrigger key={cat.id} value={cat.id}>
+                {cat.title} <span className="count">{cat.products.length}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-        {/* The content for each tab would go here */}
-        {/* For this static layout, we show the same grid in the first tab */}
-        <TabsContent value={categories[0].name}>
-          <div className={styles.toolbar}>
-            <div className={styles.toggle_wrapper}>
-              <label htmlFor="diff-toggle">Только отличия</label>
-            </div>
-            <button className={styles.clear_button}>Очистить сравнение</button>
-          </div>
-          <CompareGridWidget />
-        </TabsContent>
-        {/* Other TabsContent would go here... */}
-      </Tabs>
+          {sections.map((cat) => (
+            <TabsContent key={cat.id} value={cat.id}>
+              <div className={styles.toolbar}>
+                <div className={styles.toggle_wrapper}>
+                  <label htmlFor="diff-toggle">Только отличия</label>
+                </div>
+                <button className={styles.clear_button}>
+                  Очистить сравнение
+                </button>
+              </div>
+              <CompareGridWidget items={cat.products} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      )}
     </div>
   );
 };

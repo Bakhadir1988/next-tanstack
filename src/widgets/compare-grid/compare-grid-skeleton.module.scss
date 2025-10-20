@@ -1,0 +1,66 @@
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer_bg {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, #eff1f3 4%, #e2e2e2 25%, #eff1f3 36%);
+  background-size: 1000px 100%;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; // Match the gap in the real component
+}
+
+.products_row,
+.characteristics_grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); // Desktop default
+  gap: 10px; // Match slider spaceBetween
+
+  @media (max-width: 1279px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.product_skeleton {
+  @extend .shimmer_bg;
+  height: 350px; // Approximate height of CompareProductCard
+  border-radius: 8px;
+}
+
+.product_chars_column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.char_value_item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.char_name_skeleton {
+  @extend .shimmer_bg;
+  height: 16px;
+  width: 80%;
+  border-radius: 4px;
+}
+
+.char_value_skeleton {
+  @extend .shimmer_bg;
+  height: 16px;
+  width: 50%;
+  border-radius: 4px;
+}

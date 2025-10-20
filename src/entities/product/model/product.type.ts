@@ -44,4 +44,5 @@ export type ProductType = {
   url: string;
   manual_url: string;
   exists_in_lists: string[];
+  sect_id?: string | null;
 };
