@@ -1,9 +1,11 @@
 import { ListProductType } from '@/shared/types/list.product.type';
 
 import { API_BASE_URL } from '../config/site.config';
+import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
 
 export type ListResponse = {
   items: ListProductType[];
+  map?: CatalogMap;
   total_cost?: number;
   total_quantity?: number;
 };
@@ -95,6 +97,19 @@ const createListApi = (list: ListType) => {
       form.append('subitem_id', '');
       form.append('quantity', '1');
       return fetchFromListServer(form);
+    },
+
+    clear: async (sessionId: string): Promise<ListResponse | string> => {
+      const form = new FormData();
+      if (sessionId) {
+        form.append('session_id', sessionId);
+      }
+      form.append('comp', 'list_server');
+      form.append('list', list);
+      form.append('action', 'clear');
+      const result = await fetchFromListServer(form);
+      console.log(`Clear API result for list '${list}':`, result);
+      return result;
     },
   };
 };

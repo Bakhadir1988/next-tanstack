@@ -1,11 +1,13 @@
 'use client';
 
+import { CatalogMap } from '@/entities/catalog/model/catalog-map.type';
 import { ProductType } from '@/entities/product/model/product.type';
 import { CompareProductCard } from '@/entities/product/ui/compare-product-card';
-import { Flex } from '@/shared/ui';
+import { CompareProductCharacteristics } from '@/entities/product/ui/components/comapre-product-characteristics/comapre-product-characteristics';
+import { transformProductProperties } from '@/shared/lib/transform-product-properties';
+import { Button } from '@/shared/ui/button';
 import { Slider } from '@/shared/ui/slider';
-import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SwiperCore from 'swiper';
 import { SwiperSlide } from 'swiper/react';
 import { CompareGridSkeleton } from './compare-grid-skeleton';
@@ -13,13 +15,67 @@ import styles from './compare-grid.module.scss';
 
 type CompareGridWidgetProps = {
   items: ProductType[];
+  map?: CatalogMap;
 };
 
-export const CompareGridWidget = ({ items }: CompareGridWidgetProps) => {
+export const CompareGridWidget = ({ items, map }: CompareGridWidgetProps) => {
   const [productsSwiper, setProductsSwiper] = useState<SwiperCore | null>(null);
   const [charsSwiper, setCharsSwiper] = useState<SwiperCore | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showOnlyDifferences, setShowOnlyDifferences] = useState(false);
+
+  const allCharacteristicTitles = useMemo(() => {
+    if (!items) return [];
+    const allCharsByProduct = items.map((item) =>
+      transformProductProperties(item, map),
+    );
+    const allTitles = new Set<string>();
+    allCharsByProduct.flat().forEach((char) => allTitles.add(char.title));
+    return Array.from(allTitles);
+  }, [items, map]);
+
+  const differingCharacteristics = useMemo(() => {
+    if (!items || items.length < 2) {
+      return new Set<string>();
+    }
+
+    const allCharsByProduct = items.map((item) =>
+      transformProductProperties(item, map),
+    );
+
+    const differences = new Set<string>();
+
+    allCharacteristicTitles.forEach((title) => {
+      let firstValue: string | string[] | null = null;
+      let isFirst = true;
+      let hasDifference = false;
+
+      for (const productChars of allCharsByProduct) {
+        const char = productChars.find((c) => c.title === title);
+        const value =
+          char && char.value
+            ? Array.isArray(char.value)
+              ? char.value.join(',')
+              : char.value
+            : null;
+
+        if (isFirst) {
+          firstValue = value;
+          isFirst = false;
+        } else if (value !== firstValue) {
+          hasDifference = true;
+          break;
+        }
+      }
+
+      if (hasDifference) {
+        differences.add(title);
+      }
+    });
+
+    return differences;
+  }, [items, map, allCharacteristicTitles]);
 
   useEffect(() => {
     if (
@@ -34,23 +90,6 @@ export const CompareGridWidget = ({ items }: CompareGridWidgetProps) => {
     }
   }, [productsSwiper, charsSwiper]);
 
-  // Создаем моковые данные для характеристик
-  const mockCharacteristics = items.map((_, i) => [
-    `Держится до ${10 + i} часов`,
-    'Помада',
-    'Франция',
-    'Увлажняющий',
-    `${133 + i} Беспечный розовый`,
-  ]);
-
-  const characteristics_names = [
-    'Дополнительно',
-    'Тип',
-    'Страна производства',
-    'Эффект',
-    'Цвет',
-  ];
-
   const sliderOptions = {
     spaceBetween: 10,
     breakpoints: {
@@ -58,13 +97,21 @@ export const CompareGridWidget = ({ items }: CompareGridWidgetProps) => {
         slidesPerView: 2,
       },
       1280: {
-        slidesPerView: 6,
+        slidesPerView: 5,
       },
     },
   };
 
   return (
     <>
+      <div className={styles.toolbar}>
+        <Button
+          variant="ghost"
+          onClick={() => setShowOnlyDifferences((prev) => !prev)}
+        >
+          {showOnlyDifferences ? 'Показать все' : 'Только различия'}
+        </Button>
+      </div>
       {!isInitialized && <CompareGridSkeleton />}
       <div
         className={styles.root}
@@ -75,6 +122,7 @@ export const CompareGridWidget = ({ items }: CompareGridWidgetProps) => {
           onSwiper={setProductsSwiper}
           onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
           className={styles.products_row}
+          spaceBetween={0}
         >
           {items.map((item) => (
             <SwiperSlide key={item.item_id}>
@@ -87,29 +135,19 @@ export const CompareGridWidget = ({ items }: CompareGridWidgetProps) => {
           onSwiper={setCharsSwiper}
           navigation={false}
           className={styles.characteristics_grid}
+          spaceBetween={0}
         >
-          {mockCharacteristics.map((productChars, productIndex) => (
-            <SwiperSlide key={productIndex}>
+          {items.map((item, index) => (
+            <SwiperSlide key={item.item_id}>
               <div className={styles.product_chars_column}>
-                {productChars.map((char_value, index) => (
-                  <Flex
-                    direction="column"
-                    key={index}
-                    className={styles.char_value_item}
-                  >
-                    <span
-                      className={clsx(
-                        styles.char_name,
-                        productIndex === activeIndex
-                          ? styles.char_name_first
-                          : styles.char_name_hidden,
-                      )}
-                    >
-                      {characteristics_names[index]}
-                    </span>
-                    <span className={styles.char_value}>{char_value}</span>
-                  </Flex>
-                ))}
+                <CompareProductCharacteristics
+                  product={item}
+                  map={map}
+                  showTitle={index === activeIndex}
+                  showOnlyDifferences={showOnlyDifferences}
+                  differingCharacteristics={differingCharacteristics}
+                  allCharacteristicTitles={allCharacteristicTitles}
+                />
               </div>
             </SwiperSlide>
           ))}

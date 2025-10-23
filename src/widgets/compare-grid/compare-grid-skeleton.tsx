@@ -2,7 +2,7 @@ import { Flex, Grid } from '@/shared/ui';
 import styles from './compare-grid-skeleton.module.scss';
 
 export const CompareGridSkeleton = () => {
-  const productSkeletons = Array.from({ length: 6 });
+  const productSkeletons = Array.from({ length: 5 });
   const charSkeletons = Array.from({ length: 5 }); // 5 characteristics per product
 
   return (

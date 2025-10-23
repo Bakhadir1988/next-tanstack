@@ -3,6 +3,13 @@ import { ThemeProvider } from 'next-themes';
 import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 
+import getQueryClient from '@/shared/lib/get-query-client';
+import { Header } from '@/widgets/header/header';
+
+import { Providers } from './providers';
+
+import type { Metadata } from 'next';
+
 import { ProductType } from '@/entities/product/model/product.type';
 import { catalogApi } from '@/shared/api/catalog.api';
 import {
@@ -11,13 +18,6 @@ import {
   favoritesApi,
   ListResponse,
 } from '@/shared/api/list.api';
-import getQueryClient from '@/shared/lib/get-query-client';
-import { Header } from '@/widgets/header/header';
-
-import { Providers } from './providers';
-
-import type { Metadata } from 'next';
-
 import '../shared/styles/index.scss';
 
 const roboto = localFont({
@@ -104,7 +104,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <body className={roboto.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Providers
             sessionId={sessionId ?? ''}
             dehydratedState={dehydratedState}

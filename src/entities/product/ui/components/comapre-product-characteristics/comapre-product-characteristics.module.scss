@@ -1,0 +1,29 @@
+.root {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+  min-height: 60px;
+  font-size: 14px; // fallback for rem
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &.is-different {
+    background-color: rgba(255, 235, 59, 0.1);
+  }
+}
+
+.title {
+  color: var(--color-text-muted);
+  font-size: 12px; // fallback for rem
+  margin-bottom: 4px; // fallback for var
+}
+
+.value {
+  font-weight: 500;
+}

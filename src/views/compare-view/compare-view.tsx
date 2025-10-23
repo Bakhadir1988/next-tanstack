@@ -10,19 +10,33 @@ import { EmptyState, Heading } from '@/shared/ui';
 import { Breadcrumbs } from '@/shared/ui/breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import styles from './compare-view.module.scss';
 
 export const CompareView = () => {
   const sessionId = useSession();
+  const queryClient = useQueryClient();
 
-  const { data: items } = useQuery<ListResponse>({
+  const { data } = useQuery<ListResponse>({
     queryKey: ['compare', sessionId],
     queryFn: () => compareApi.get(sessionId),
     enabled: !!sessionId,
   });
 
-  const initItems: ProductType[] = (items?.items ?? []).map((item) => ({
+  const { mutate: clearCompare, isPending: isClearing } = useMutation({
+    mutationFn: () => compareApi.clear(sessionId!),
+    onSuccess: (data) => {
+      console.log('Clear mutation successful:', data);
+      queryClient.invalidateQueries({ queryKey: ['compare', sessionId] });
+    },
+    onError: (error) => {
+      console.error('Clear mutation failed:', error);
+    },
+  });
+
+  const { items, map } = data ?? {};
+
+  const initItems: ProductType[] = (items ?? []).map((item) => ({
     ...item.data,
     url: item.url,
     sect_id: item.sect_id,
@@ -73,11 +87,15 @@ export const CompareView = () => {
                 <div className={styles.toggle_wrapper}>
                   <label htmlFor="diff-toggle">Только отличия</label>
                 </div>
-                <button className={styles.clear_button}>
-                  Очистить сравнение
+                <button
+                  className={styles.clear_button}
+                  onClick={() => clearCompare()}
+                  disabled={isClearing}
+                >
+                  {isClearing ? 'Очистка...' : 'Очистить сравнение'}
                 </button>
               </div>
-              <CompareGridWidget items={cat.products} />
+              <CompareGridWidget items={cat.products} map={map} />
             </TabsContent>
           ))}
         </Tabs>
