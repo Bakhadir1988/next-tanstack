@@ -94,12 +94,21 @@ export const useProductListMutation = ({
       return { previousData };
     },
 
-    mutationFn: async ({ product }) => {
-      // Используем сохраненное значение из ref
+    mutationFn: async ({ product, quantity }) => {
       const wasInList = wasInListRef.current;
 
-      const apiAction = wasInList ? api.remove : api.add;
-      await apiAction({ item_id: product.item_id }, sessionId);
+      if (wasInList) {
+        await api.remove({ item_id: product.item_id }, sessionId);
+      } else {
+        await api.add(
+          {
+            item_id: product.item_id,
+            quantity: quantity?.toString() || '1',
+          },
+          sessionId,
+        );
+      }
+
       return !wasInList;
     },
 

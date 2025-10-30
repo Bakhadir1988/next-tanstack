@@ -64,10 +64,10 @@ const createListApi = (list: ListType) => {
     },
 
     add: (
-      item: { item_id: string },
+      item: { item_id: string; quantity: string },
       sessionId: string,
     ): Promise<ListResponse | string> => {
-      console.log('item', item);
+      console.log('item add', item);
 
       const form = new FormData();
       if (sessionId) {
@@ -78,7 +78,7 @@ const createListApi = (list: ListType) => {
       form.append('action', 'add');
       form.append('item_id', item.item_id);
       form.append('subitem_id', '');
-      form.append('quantity', '1');
+      form.append('quantity', item.quantity || '1');
       return fetchFromListServer(form);
     },
 

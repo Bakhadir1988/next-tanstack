@@ -23,12 +23,11 @@ export const CartView = () => {
   const items: ProductType[] = (data?.items ?? []).map((item) => ({
     ...item.data,
     url: item.url,
+    quantity: item.quantity,
   }));
 
-  console.log('data', data);
-
   return (
-    <>
+    <div className="container">
       <Heading as="h1">Корзина</Heading>
       {!items.length ? (
         <EmptyState
@@ -46,6 +45,6 @@ export const CartView = () => {
           <CartSummary />
         </Grid>
       )}
-    </>
+    </div>
   );
 };

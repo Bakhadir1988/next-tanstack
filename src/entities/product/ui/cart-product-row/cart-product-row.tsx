@@ -27,6 +27,8 @@ type CartProductRowProps = {
 export const CartProductRow = ({ product }: CartProductRowProps) => {
   const { rating } = product;
 
+  console.log('product', product);
+
   const { addToast } = useToast();
 
   const { favoriteIds, compareIds } = useProductListContext();
@@ -128,7 +130,10 @@ export const CartProductRow = ({ product }: CartProductRowProps) => {
 
       {/* Quantity Counter */}
       <div className={styles.quantity_counter_container}>
-        <QuantityCounter className={styles.quantity_counter} />
+        <QuantityCounter
+          className={styles.quantity_counter}
+          value={product.quantity}
+        />
         <div className={styles.price_per_item}>
           {price.toLocaleString('ru-RU')} ₽/шт
         </div>
